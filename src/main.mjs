@@ -5,8 +5,7 @@ import { logger } from "./app/logging.mjs";
 
 
 const PORT = process.env.PORT || 8080
-// const HOST = process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0';
 
-web.listen(PORT, /*HOST,*/ () => {
+web.listen(PORT, () => {
     logger.info(`Server is up and listening on ${PORT}`);
 });
