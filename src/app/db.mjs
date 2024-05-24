@@ -1,5 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { logger } from './logging.mjs'
+
+export const prisma = Prisma
 
 export const prismaClient = new PrismaClient({
     errorFormat: 'pretty',

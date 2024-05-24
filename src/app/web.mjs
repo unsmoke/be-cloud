@@ -1,9 +1,30 @@
 import express from 'express';
 import cors from 'cors';
 import dummyRouter from '../routes/dummyRouter.mjs';
+import {errorMiddleware} from "../middlewares/errorMiddleware.mjs";
+import {checkDBMiddleware} from "../middlewares/checkDBMiddleware.mjs";
+import {errors} from "../utils/messageError.mjs";
+import {responseError} from "../utils/responseAPI.mjs";
 
 export const web = express();
 web.use(express.json());
 web.use(cors());
+web.use(checkDBMiddleware)
 
 web.use('/api/v1', dummyRouter)
+
+web.use(errorMiddleware)
+
+// invalid api route
+web.use((req, res) => {
+    return res
+        .status(errors.HTTP.CODE.UNAUTHORIZED)
+        .send(
+            responseError(
+                errors.HTTP.CODE.UNAUTHORIZED,
+                errors.HTTP.STATUS.UNAUTHORIZED,
+                errors.HTTP.MESSAGE.UNAUTHORIZED
+            )
+        )
+        .end()
+})
