@@ -12,7 +12,6 @@ env:
   GAR_REPOSITORY_NAME: be-unsmoke # TODO: update Artifact Registry Repository name
   SERVICE: be-unsmoke # TODO: update Cloud Run service name
   REGION: asia-southeast2 # TODO: update Cloud Run service region
-  DATABASE_URL: postgresql://bangkit-capstone:root@34.101.46.19:5432/unsmoke
 
 jobs:
   deploy:
@@ -35,16 +34,17 @@ jobs:
         run: |-
           gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev --quiet
 
-      - name: Set Environment Variables
-        id: set-env
+      - name: Set Tag and Service Name
+        id: set-variables
         run: |
           if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
-            echo "::set-output name=service::${{ env.SERVICE }}-dev"
-            echo "::set-output name=tag::dev"
+            echo "tag=dev" >> $GITHUB_ENV
+            echo "service=${{ env.SERVICE }}-dev" >> $GITHUB_ENV
           else
-            echo "::set-output name=service::${{ env.SERVICE }}-prod"
-            echo "::set-output name=tag::${{ github.sha }}"
+            echo "tag=${{ github.sha }}" >> $GITHUB_ENV
+            echo "service=${{ env.SERVICE }}-prod" >> $GITHUB_ENV
           fi
+
 
       - name: Build and Push Container
         run: |-     
@@ -58,7 +58,7 @@ jobs:
           service: ${{ steps.set-env.outputs.service }}
           region: ${{ env.REGION }}
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ steps.set-env.outputs.service }}:${{ steps.set-env.outputs.tag }}
-          env_vars: DATABASE_URL=${{ env.DATABASE_URL }}
+          env_vars: DATABASE_URL=${{ secrets.DATABASE_URL }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
