@@ -15,11 +15,106 @@ datasource db {
 }
 
 model User {
-  user_id      Int     @id @default(autoincrement())
-  username     String  @db.VarChar(100)
-  email        String  @unique @db.VarChar(100)
-  password     String  @db.VarChar(100)
-  exp          Int     @default(0) @db.Integer
-  balance_coin Float   @default(0) @db.Real
-  is_premium   Boolean @default(false) @db.Boolean
+  user_id        String          @id @default(uuid())
+  full_name      String          @db.VarChar(100)
+  email          String          @unique @db.VarChar(100)
+  password       String          @db.VarChar(100)
+  exp            Int             @default(0) @db.Integer
+  balance_coin   Float           @default(0) @db.Real
+  // Define a relation to UserHealthData
+  userHealthData UserHealthData?
+  // Define a relation to IsPremium
+  isPremium      IsPremium?
+  // Define a relation to UserItem
+  userItems      UserItem[]
+  // Define a relation to UserShopItem
+  shopItems      UserShopItem[]
+  // Define a relation to ActivityLog
+  activityLogs   ActivityLog[]
+}
+
+model IsPremium {
+  user_id String  @id
+  tier_id String?
+  // Define a relation to User
+  user    User    @relation(fields: [user_id], references: [user_id])
+  // Define a relation to Tier
+  tier    Tier?   @relation(fields: [tier_id], references: [tier_id])
+}
+
+model Tier {
+  tier_id     String      @id @default(uuid())
+  name        String      @unique
+  description String?
+  // Define a relation to IsPremium
+  isPremiums  IsPremium[]
+}
+
+model UserHealthData {
+  user_id                String @id
+  // Define a relation to User
+  user                   User   @relation(fields: [user_id], references: [user_id])
+  cigarettes_per_day     Float
+  minutes                Float
+  uses_substitutes       Float
+  electronic_cigarette   Float
+  gender                 Int
+  age                    Float
+  smoking_interval_years Float
+  depressed              Float
+  smokes_other           Float
+  no_pleasure            Float
+  label                  Int
+}
+
+model UserItem {
+  user_id  String
+  item_id  String
+  quantity Int
+  // Define a relation to User
+  user     User   @relation(fields: [user_id], references: [user_id])
+  // Define a relation to Item
+  item     Item   @relation(fields: [item_id], references: [item_id])
+
+  // Define a composite primary key
+  @@id([user_id, item_id])
+}
+
+model Item {
+  item_id      String         @id @default(uuid())
+  name         String
+  price        Float
+  // Define a relation to UserItem
+  userItems    UserItem[]
+  UserShopItem UserShopItem[]
+}
+
+model UserShopItem {
+  user_id  String
+  item_id  String
+  quantity Int
+  // Define a relation to User
+  user     User   @relation(fields: [user_id], references: [user_id])
+  // Define a relation to Item
+  item     Item   @relation(fields: [item_id], references: [item_id])
+
+  // Define a composite primary key
+  @@id([user_id, item_id])
+}
+
+model Activity {
+  activity_id String        @id @default(uuid())
+  name        String
+  ActivityLog ActivityLog[]
+}
+
+model ActivityLog {
+  log_id      Int      @id @default(autoincrement())
+  user_id     String
+  activity_id String
+  date        DateTime
+  // Define a relation to User
+  user        User     @relation(fields: [user_id], references: [user_id])
+  // Define a relation to Activity
+  activity    Activity @relation(fields: [activity_id], references: [activity_id])
 }
