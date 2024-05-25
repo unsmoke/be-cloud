@@ -2,7 +2,7 @@ import {prismaClient} from "../app/db.mjs";
 import {ResponseError} from "../utils/responseError.mjs";
 import {errors} from "../utils/messageError.mjs";
 
-const test = async () => {
+const createUser = async () => {
    const users=  prismaClient.user.findMany();
    if (!users) {
        throw new ResponseError(
@@ -15,5 +15,5 @@ const test = async () => {
 }
 
 export default {
-    test
+    createUser
 }
