@@ -6,11 +6,13 @@ import {checkDBMiddleware} from "../middlewares/checkDBMiddleware.mjs";
 import {errors} from "../utils/messageError.mjs";
 import {responseError} from "../utils/responseAPI.mjs";
 import userRouter from '../routes/userRouter.mjs';
+import bodyParser from 'body-parser';
 
 export const web = express();
 web.use(express.json());
 web.use(cors());
 web.use(checkDBMiddleware)
+web.use(bodyParser.urlencoded({ extended: true }))
 
 web.use('/api/v1', dummyRouter)
 web.use('/api/v1', userRouter)

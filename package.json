@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/main.mjs",
     "dev": "nodemon src/main.mjs",
-    "seed": "node prisma/seed.js" 
+    "seed": "node prisma/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@prisma/client": "^5.14.0",
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
