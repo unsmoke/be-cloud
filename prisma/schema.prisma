@@ -3,27 +3,27 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // You can change this to your database provider
   url      = env("DATABASE_URL")
 }
 
 model User {
   user_id            String          @id @default(uuid())
   full_name          String
-  username           String          @unique
+  username           String?         @unique
   email              String          @unique
   password           String
-  time_zone          String
-  balance_coin       Int
-  exp                Int
-  streak_count       Int
-  money_saved        Float
-  cigarettes_avoided Int
+  time_zone          String?
+  balance_coin       Int             @default(0)
+  exp                Int             @default(0)
+  streak_count       Int             @default(0)
+  money_saved        Float           @default(0.0)
+  cigarettes_avoided Int             @default(0)
   cigarettes_quota   Int[]
-  relapse_quota      Int
-  province           String
-  city               String
-  is_premium         Boolean
+  relapse_quota      Int             @default(0)
+  province           String?
+  city               String?
+  is_premium         Boolean         @default(false)
   user_items         UserItem[]
   shop_items         ShopItem[]
   activity_logs      ActivityLog[]
