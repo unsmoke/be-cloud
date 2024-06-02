@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
                 responseError(
                     errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
                     errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
-                    errors.AUTHORIZATION.UNAUTHORIZED
+                    errors.HTTP.MESSAGE.UNAUTHORIZED
                 )
             )
     }
@@ -33,7 +33,7 @@ const authMiddleware = (req, res, next) => {
                 responseError(
                     errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
                     errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
-                    errors.AUTHORIZATION.UNAUTHORIZED
+                    errors.HTTP.MESSAGE.UNAUTHORIZED
                 )
             )
     }

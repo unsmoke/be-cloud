@@ -30,7 +30,6 @@ const AUTHENTICATION = {
 
 const AUTHORIZATION = {
     INVALID_REFRESH_TOKEN: 'invalid refresh token',
-    UNAUTHORIZED: 'unauthorized',
 }
 
 const DATABASE = {
