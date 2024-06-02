@@ -39,6 +39,11 @@ const DATABASE = {
 const USER = {
     NOT_FOUND: 'user not found',
     EMAIL_ALREADY_EXISTS: 'the email address is already in use',
+    INSUFFICIENT_BALANCE: 'you do not have enough balance',
+}
+
+const ITEM = {
+    NOT_FOUND: 'item not found',
 }
 
 export const errors = {
@@ -46,5 +51,6 @@ export const errors = {
     DATABASE: DATABASE,
     AUTHENTICATION: AUTHENTICATION,
     USER: USER,
-    AUTHORIZATION: AUTHORIZATION
+    AUTHORIZATION: AUTHORIZATION,
+    ITEM: ITEM
 }
