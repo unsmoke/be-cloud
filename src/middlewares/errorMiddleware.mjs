@@ -1,7 +1,7 @@
-import {JoiError, ResponseError} from "../utils/responseError.mjs";
-import {responseError} from "../utils/responseAPI.mjs"
-import {errors} from "../utils/messageError.mjs";
-import {prisma} from '../app/db.mjs'
+import { JoiError, ResponseError } from '../utils/responseError.mjs'
+import { responseError } from '../utils/responseAPI.mjs'
+import { errors } from '../utils/messageError.mjs'
+import { prisma } from '../app/db.mjs'
 
 export const errorMiddleware = async (err, req, res, next) => {
     if (!err) {

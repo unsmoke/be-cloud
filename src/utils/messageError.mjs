@@ -14,15 +14,13 @@ const httpErrors = {
         INTERNAL_SERVER_ERROR: 'internal server error',
     },
     MESSAGE: {
-        INTERNAL_SERVER_ERROR:
-            "we're sorry, but there was a server error, please try again later",
+        INTERNAL_SERVER_ERROR: "we're sorry, but there was a server error, please try again later",
         INVALID_API_ROUTE:
             'the requested API route is not valid, please check your request and try again',
         FORBIDDEN: 'you are not allowed to access this resource',
         NOT_FOUND: 'the requested resource is not found',
         UNKNOWN_BODY_ERROR: 'the request body is invalid, please check your input and try again',
         UNAUTHORIZED: 'you are not authorized to access this resource',
-
     },
 }
 

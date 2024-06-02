@@ -1,6 +1,6 @@
-import {prismaClient} from "../app/db.mjs";
-import {errors} from "../utils/messageError.mjs";
-import {ResponseError} from "../utils/responseError.mjs";
+import { prismaClient } from '../app/db.mjs'
+import { errors } from '../utils/messageError.mjs'
+import { ResponseError } from '../utils/responseError.mjs'
 
 export const checkDBMiddleware = async (req, res, next) => {
     try {
