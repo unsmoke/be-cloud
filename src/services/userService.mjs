@@ -1,19 +1,11 @@
 import bcrypt from 'bcrypt'
 import {prismaClient} from '../app/db.mjs'
-import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import {ResponseError} from "../utils/responseError.mjs";
 import {errors} from "../utils/messageError.mjs";
+import tokenService from "./tokenService.mjs";
 
 dotenv.config()
-
-const generateRefreshToken = (userId) => {
-    const payload = {userId}
-    const secretKey = process.env.JWT_REFRESH_SECRET
-    const expiresIn = '7d'
-
-    return jwt.sign(payload, secretKey, {expiresIn})
-}
 
 const registerUser = async (requestBody) => {
     const {fullName, email, password} = requestBody
@@ -63,35 +55,11 @@ const loginUser = async (requestBody) => {
 
     const payload = {userId: user.user_id}
 
-    const accessTokenSecretKey = process.env.JWT_SECRET
+    const accessToken = tokenService.generateAccessToken(payload)
 
-    const accessToken = await jwt.sign(payload, accessTokenSecretKey, {expiresIn: '1h'})
+    const refreshToken = tokenService.generateRefreshToken(payload)
 
-    const refreshToken = await generateRefreshToken(user.user_id)
-
-    const {user_id, full_name, email: userEmail} = user
-
-    return {user_id, full_name, email: userEmail, accessToken, refreshToken}
+    return {accessToken, refreshToken}
 }
 
-const refreshAccessToken = async (requestBody) => {
-    const {refreshToken} = requestBody
-
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
-    const userId = decoded.userId
-
-    const user = await prismaClient.user.findUnique({where: {user_id: userId}})
-    if (!user) {
-        throw new ResponseError(
-            errors.HTTP.CODE.UNAUTHORIZED,
-            errors.HTTP.STATUS.UNAUTHORIZED,
-            errors.AUTHORIZATION.INVALID_REFRESH_TOKEN
-        )
-    }
-
-    const newAccessToken = jwt.sign({userId}, process.env.JWT_SECRET, {expiresIn: '1h'})
-
-    return {accessToken: newAccessToken}
-}
-
-export default {registerUser, loginUser, refreshAccessToken}
+export default {registerUser, loginUser}

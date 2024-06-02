@@ -6,6 +6,7 @@ import {errors} from '../utils/messageError.mjs'
 import {responseError} from '../utils/responseAPI.mjs'
 import userRouter from '../routes/userRouter.mjs'
 import bodyParser from 'body-parser'
+import tokenRouter from "../routes/tokenRouter.mjs";
 
 export const web = express()
 web.use(express.json())
@@ -14,6 +15,7 @@ web.use(checkDBMiddleware)
 web.use(bodyParser.urlencoded({ extended: true }))
 
 web.use('/api/v1', userRouter)
+web.use('/api/v1', tokenRouter)
 
 web.use(errorMiddleware)
 

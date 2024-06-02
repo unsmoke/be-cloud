@@ -7,7 +7,6 @@ const userRouter = express.Router()
 
 userRouter.post('/login', userValidations.validateLogin, userController.login)
 userRouter.post('/register', userValidations.validateRegister, userController.register)
-userRouter.post('/refresh', userController.refresh)
 
 // Test middleware
 userRouter.get('/protected-route', authMiddleware, (req, res) => {

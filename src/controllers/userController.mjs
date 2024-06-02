@@ -1,10 +1,11 @@
-import userServices from '../services/userServices.mjs'
+import userService from '../services/userService.mjs'
 import {success} from '../utils/messageSuccess.mjs'
 import {responseSuccess} from '../utils/responseAPI.mjs'
+import tokenService from "../services/tokenService.mjs";
 
 const login = async (req, res, next) => {
     try {
-        const result = await userServices.loginUser(req.body)
+        const result = await userService.loginUser(req.body)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -15,7 +16,7 @@ const login = async (req, res, next) => {
 
 const register = async (req, res, next) => {
     try {
-        const result = await userServices.registerUser(req.body)
+        const result = await userService.registerUser(req.body)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -26,7 +27,7 @@ const register = async (req, res, next) => {
 
 const refresh = async (req, res, next) => {
     try {
-        const result = await userServices.refreshAccessToken(req.body)
+        const result = await tokenService.refreshAccessToken(req.body)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
