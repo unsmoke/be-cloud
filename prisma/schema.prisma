@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,106 +8,121 @@ datasource db {
 }
 
 model User {
-  user_id        String          @id @default(uuid())
-  full_name      String          @db.VarChar(100)
-  email          String          @unique @db.VarChar(100)
-  password       String          @db.VarChar(100)
-  exp            Int             @default(0) @db.Integer
-  balance_coin   Float           @default(0) @db.Real
-  // Define a relation to UserHealthData
-  userHealthData UserHealthData?
-  // Define a relation to IsPremium
-  isPremium      IsPremium?
-  // Define a relation to UserItem
-  userItems      UserItem[]
-  // Define a relation to UserShopItem
-  shopItems      UserShopItem[]
-  // Define a relation to ActivityLog
-  activityLogs   ActivityLog[]
-}
-
-model IsPremium {
-  user_id String  @id
-  tier_id String?
-  // Define a relation to User
-  user    User    @relation(fields: [user_id], references: [user_id])
-  // Define a relation to Tier
-  tier    Tier?   @relation(fields: [tier_id], references: [tier_id])
-}
-
-model Tier {
-  tier_id     String      @id @default(uuid())
-  name        String      @unique
-  description String?
-  // Define a relation to IsPremium
-  isPremiums  IsPremium[]
-}
-
-model UserHealthData {
-  user_id                String @id
-  // Define a relation to User
-  user                   User   @relation(fields: [user_id], references: [user_id])
-  cigarettes_per_day     Float
-  minutes                Float
-  uses_substitutes       Float
-  electronic_cigarette   Float
-  gender                 Int
-  age                    Float
-  smoking_interval_years Float
-  depressed              Float
-  smokes_other           Float
-  no_pleasure            Float
-  label                  Int
-}
-
-model UserItem {
-  user_id  String
-  item_id  String
-  quantity Int
-  // Define a relation to User
-  user     User   @relation(fields: [user_id], references: [user_id])
-  // Define a relation to Item
-  item     Item   @relation(fields: [item_id], references: [item_id])
-
-  // Define a composite primary key
-  @@id([user_id, item_id])
+  user_id            String          @id @default(uuid())
+  full_name          String
+  username           String          @unique
+  email              String          @unique
+  password           String
+  time_zone          String
+  balance_coin       Int
+  exp                Int
+  streak_count       Int
+  money_saved        Float
+  cigarettes_avoided Int
+  cigarettes_quota   Int[]
+  relapse_quota      Int
+  province           String
+  city               String
+  is_premium         Boolean
+  user_items         UserItem[]
+  shop_items         ShopItem[]
+  activity_logs      ActivityLog[]
+  user_healths       UserHealth[]
+  user_plans         UserPlan[]
+  user_milestones    UserMilestone[]
 }
 
 model Item {
-  item_id      String         @id @default(uuid())
-  name         String
-  price        Float
-  // Define a relation to UserItem
-  userItems    UserItem[]
-  UserShopItem UserShopItem[]
+  item_id     String     @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  img_url     String
+  user_items  UserItem[]
+  shop_items  ShopItem[]
 }
 
-model UserShopItem {
-  user_id  String
-  item_id  String
-  quantity Int
-  // Define a relation to User
-  user     User   @relation(fields: [user_id], references: [user_id])
-  // Define a relation to Item
-  item     Item   @relation(fields: [item_id], references: [item_id])
+model UserItem {
+  user_id String
+  item_id String
+  user    User   @relation(fields: [user_id], references: [user_id])
+  item    Item   @relation(fields: [item_id], references: [item_id])
 
-  // Define a composite primary key
   @@id([user_id, item_id])
 }
 
-model Activity {
-  activity_id String        @id @default(uuid())
-  name        String
-  ActivityLog ActivityLog[]
+model ShopItem {
+  user_id String
+  item_id String
+  user    User   @relation(fields: [user_id], references: [user_id])
+  item    Item   @relation(fields: [item_id], references: [item_id])
+
+  @@id([user_id, item_id])
 }
 
 model ActivityLog {
-  log_id      Int      @id @default(autoincrement())
-  user_id     String
-  activity_id String
-  date        DateTime
-  // Define a relation to User
-  user        User     @relation(fields: [user_id], references: [user_id])
-  // Define a relation to Activity
-  activity    Activity @relation(fields: [activity_id], references: [activity_id])
+  activity_log_id Int                @id @default(autoincrement())
+  user_id         String
+  breathing_id    Int?
+  journal_id      Int?
+  date            DateTime
+  user            User               @relation(fields: [user_id], references: [user_id])
+  breathing       BreathingActivity? @relation(fields: [breathing_id], references: [breathing_id])
+  journal         JournalActivity?   @relation(fields: [journal_id], references: [journal_id])
+}
+
+model BreathingActivity {
+  breathing_id  Int           @id @default(autoincrement())
+  duration      Int
+  reward        Float
+  activity_logs ActivityLog[]
+}
+
+model JournalActivity {
+  journal_id    Int           @id @default(autoincrement())
+  title         String
+  body          String
+  reward        Float
+  activity_logs ActivityLog[]
+}
+
+model UserHealth {
+  user_id              String
+  date_of_birth        DateTime
+  gender               String
+  smoking_start_time   Int
+  is_nicotine_med      Boolean
+  is_e_cigarette       Boolean
+  first_cigarette_date DateTime
+  is_depressed         Boolean
+  is_other_tobacco     Boolean
+  is_spirit            Boolean
+  cigarettes_per_day   Int
+  cigarettes_per_pack  Int
+  pack_price           Float
+  user                 User     @relation(fields: [user_id], references: [user_id])
+
+  @@id([user_id])
+}
+
+model UserPlan {
+  user_id                   String
+  duration                  Int
+  probability               Float
+  original_cigarettes_quota Int[]
+  is_active                 Boolean
+  user                      User    @relation(fields: [user_id], references: [user_id])
+
+  @@id([user_id])
+}
+
+model UserMilestone {
+  milestone_id   Int      @id @default(autoincrement())
+  user_id        String
+  title          String
+  description    String
+  target_value   Int
+  achieved_value Int
+  date_achieved  DateTime
+  user           User     @relation(fields: [user_id], references: [user_id])
 }
