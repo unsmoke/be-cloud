@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
+import {web} from './app/web.mjs'
+import {logger} from './app/logging.mjs'
 
 dotenv.config()
-import { web } from './app/web.mjs'
-import { logger } from './app/logging.mjs'
 
 const PORT = process.env.PORT || 8080
 

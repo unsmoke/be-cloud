@@ -24,11 +24,28 @@ const httpErrors = {
     },
 }
 
+const AUTHENTICATION = {
+    INVALID_CREDENTIALS: 'invalid email or password, please verify and retry',
+}
+
+const AUTHORIZATION = {
+    INVALID_REFRESH_TOKEN: 'invalid refresh token',
+    UNAUTHORIZED: 'unauthorized',
+}
+
 const DATABASE = {
     CONNECTION: 'failed to connect to the database, please try again later',
+}
+
+const USER = {
+    NOT_FOUND: 'user not found',
+    EMAIL_ALREADY_EXISTS: 'the email address is already in use',
 }
 
 export const errors = {
     HTTP: httpErrors,
     DATABASE: DATABASE,
+    AUTHENTICATION: AUTHENTICATION,
+    USER: USER,
+    AUTHORIZATION: AUTHORIZATION
 }

@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { responseError } from '../utils/responseAPI.mjs'
-import { errors } from '../utils/messageError.mjs'
+import {responseError} from '../utils/responseAPI.mjs'
+import {errors} from '../utils/messageError.mjs'
 
 dotenv.config()
 
-const isAuthenticated = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -15,7 +15,7 @@ const isAuthenticated = (req, res, next) => {
                 responseError(
                     errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
                     errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
-                    'Unauthorized'
+                    errors.AUTHORIZATION.UNAUTHORIZED
                 )
             )
     }
@@ -33,10 +33,10 @@ const isAuthenticated = (req, res, next) => {
                 responseError(
                     errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
                     errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
-                    e.message
+                    errors.AUTHORIZATION.UNAUTHORIZED
                 )
             )
     }
 }
 
-export default isAuthenticated
+export default authMiddleware

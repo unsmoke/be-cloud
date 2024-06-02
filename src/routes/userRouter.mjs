@@ -1,7 +1,7 @@
 import express from 'express'
 import userController from '../controllers/userController.mjs'
 import userValidations from '../validations/userValidations.mjs'
-import isAuthenticated from '../middlewares/isAuthenticated.mjs'
+import authMiddleware from '../middlewares/authMiddleware.mjs'
 
 const userRouter = express.Router()
 
@@ -10,7 +10,7 @@ userRouter.post('/register', userValidations.validateRegister, userController.re
 userRouter.post('/refresh', userController.refresh)
 
 // Test middleware
-userRouter.get('/protected-route', isAuthenticated, (req, res) => {
+userRouter.get('/protected-route', authMiddleware, (req, res) => {
     res.json({ message: 'Welcome, authenticated user!' })
 })
 
