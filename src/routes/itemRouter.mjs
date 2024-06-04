@@ -4,6 +4,7 @@ import authMiddleware from '../middlewares/authMiddleware.mjs'
 
 const itemRouter = express.Router()
 
+itemRouter.get('/item', authMiddleware, itemController.getAllItem)
 itemRouter.get('/item/:item_id', authMiddleware, itemController.getItem)
 
 export default itemRouter

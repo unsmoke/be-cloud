@@ -5,6 +5,12 @@ import { errors } from "../utils/messageError.mjs";
 
 dotenv.config()
 
+const getAllItem = async () => {
+  const items = await prismaClient.item.findMany()
+
+  return { items };
+}
+
 const getItemDetail = async (requestItemId) => {
   const item = await prismaClient.item.findUnique({
     where: { item_id: requestItemId },
@@ -21,4 +27,4 @@ const getItemDetail = async (requestItemId) => {
   return { item };
 }
 
-export default { getItemDetail }
+export default { getItemDetail, getAllItem }

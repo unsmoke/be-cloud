@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/main.mjs",
     "dev": "nodemon src/main.mjs",
-    "seed": "node prisma/seed.js",
+    "seed": "node prisma/seeder/index.mjs",
     "lint": "npx eslint src",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
