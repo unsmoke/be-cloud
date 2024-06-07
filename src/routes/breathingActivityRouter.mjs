@@ -1,5 +1,5 @@
 import express from 'express'
-import breathingActivityController from "../controllers/breathingActivityController.mjs";
+import breathingActivityController from '../controllers/breathingActivityController.mjs'
 
 const breathingActivityRouter = express.Router()
 

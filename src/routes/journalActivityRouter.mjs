@@ -1,5 +1,5 @@
 import express from 'express'
-import journalActivityController from "../controllers/journalActivityController.mjs";
+import journalActivityController from '../controllers/journalActivityController.mjs'
 
 const journalActivityRouter = express.Router()
 

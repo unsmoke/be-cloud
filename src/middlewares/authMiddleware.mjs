@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import {responseError} from '../utils/responseAPI.mjs'
-import {errors} from '../utils/messageError.mjs'
+import { responseError } from '../utils/responseAPI.mjs'
+import { errors } from '../utils/messageError.mjs'
 
 dotenv.config()
 

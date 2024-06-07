@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
-import {web} from './app/web.mjs'
-import {logger} from './app/logging.mjs'
+import { web } from './app/web.mjs'
+import { logger } from './app/logging.mjs'
 
 dotenv.config()
 

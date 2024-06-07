@@ -1,19 +1,19 @@
 import express from 'express'
 import cors from 'cors'
-import {errorMiddleware} from '../middlewares/errorMiddleware.mjs'
-import {checkDBMiddleware} from '../middlewares/checkDBMiddleware.mjs'
-import {errors} from '../utils/messageError.mjs'
-import {responseError} from '../utils/responseAPI.mjs'
+import { errorMiddleware } from '../middlewares/errorMiddleware.mjs'
+import { checkDBMiddleware } from '../middlewares/checkDBMiddleware.mjs'
+import { errors } from '../utils/messageError.mjs'
+import { responseError } from '../utils/responseAPI.mjs'
 import userRouter from '../routes/userRouter.mjs'
 import bodyParser from 'body-parser'
-import tokenRouter from "../routes/tokenRouter.mjs";
+import tokenRouter from '../routes/tokenRouter.mjs'
 import shopRouter from '../routes/shopRouter.mjs'
 import itemRouter from '../routes/itemRouter.mjs'
 import inventoryRouter from '../routes/inventoryRouter.mjs'
-import activityLogRouter from "../routes/activityLogRouter.mjs";
-import breathingActivityRouter from "../routes/breathingActivityRouter.mjs";
-import journalActivityRouter from "../routes/journalActivityRouter.mjs";
-import authMiddleware from "../middlewares/authMiddleware.mjs";
+import activityLogRouter from '../routes/activityLogRouter.mjs'
+import breathingActivityRouter from '../routes/breathingActivityRouter.mjs'
+import journalActivityRouter from '../routes/journalActivityRouter.mjs'
+import authMiddleware from '../middlewares/authMiddleware.mjs'
 
 export const web = express()
 web.use(express.json())

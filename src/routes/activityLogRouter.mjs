@@ -1,5 +1,5 @@
 import express from 'express'
-import activityLogController from "../controllers/activityLogController.mjs";
+import activityLogController from '../controllers/activityLogController.mjs'
 
 const activityLogRouter = express.Router()
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import shopController from "../controllers/shopController.mjs";
+import shopController from '../controllers/shopController.mjs'
 import authMiddleware from '../middlewares/authMiddleware.mjs'
 import { validateBuyItem } from '../validations/shopValidations.mjs'
 

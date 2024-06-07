@@ -1,13 +1,13 @@
-import seedItems from "./itemSeeder.mjs";
+import seedItems from './itemSeeder.mjs'
 
 const seed = async () => {
-  await seedItems();
+    await seedItems()
 }
 
 seed().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+    console.error(e)
+    process.exit(1)
+})
 
 // Run the seeder
 // $ node -r esm prisma/seeder/index.mjs
