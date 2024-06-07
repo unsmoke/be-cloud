@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // You can change this to your database provider
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -24,6 +24,8 @@ model User {
   province           String?
   city               String?
   is_premium         Boolean         @default(false)
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
   user_items         UserItem[]
   shop_items         ShopItem[]
   activity_logs      ActivityLog[]
@@ -38,24 +40,30 @@ model Item {
   description String
   price       Float
   img_url     String
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
   user_items  UserItem[]
   shop_items  ShopItem[]
 }
 
 model UserItem {
-  user_id String
-  item_id String
-  user    User   @relation(fields: [user_id], references: [user_id])
-  item    Item   @relation(fields: [item_id], references: [item_id])
+  user_id    String
+  item_id    String
+  user       User     @relation(fields: [user_id], references: [user_id])
+  item       Item     @relation(fields: [item_id], references: [item_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@id([user_id, item_id])
 }
 
 model ShopItem {
-  user_id String
-  item_id String
-  user    User   @relation(fields: [user_id], references: [user_id])
-  item    Item   @relation(fields: [item_id], references: [item_id])
+  user_id    String
+  item_id    String
+  user       User     @relation(fields: [user_id], references: [user_id])
+  item       Item     @relation(fields: [item_id], references: [item_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@id([user_id, item_id])
 }
@@ -66,6 +74,8 @@ model ActivityLog {
   breathing_id    Int?
   journal_id      Int?
   date            DateTime
+  created_at      DateTime           @default(now())
+  updated_at      DateTime           @updatedAt
   user            User               @relation(fields: [user_id], references: [user_id])
   breathing       BreathingActivity? @relation(fields: [breathing_id], references: [breathing_id])
   journal         JournalActivity?   @relation(fields: [journal_id], references: [journal_id])
@@ -75,6 +85,8 @@ model BreathingActivity {
   breathing_id  Int           @id @default(autoincrement())
   duration      Int
   reward        Float
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
   activity_logs ActivityLog[]
 }
 
@@ -83,6 +95,8 @@ model JournalActivity {
   title         String
   body          String
   reward        Float
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
   activity_logs ActivityLog[]
 }
 
@@ -100,6 +114,8 @@ model UserHealth {
   cigarettes_per_day   Int
   cigarettes_per_pack  Int
   pack_price           Float
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
   user                 User     @relation(fields: [user_id], references: [user_id])
 
   @@id([user_id])
@@ -111,7 +127,9 @@ model UserPlan {
   probability               Float
   original_cigarettes_quota Int[]
   is_active                 Boolean
-  user                      User    @relation(fields: [user_id], references: [user_id])
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+  user                      User     @relation(fields: [user_id], references: [user_id])
 
   @@id([user_id])
 }
@@ -124,5 +142,7 @@ model UserMilestone {
   target_value   Int
   achieved_value Int
   date_achieved  DateTime
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
   user           User     @relation(fields: [user_id], references: [user_id])
 }
