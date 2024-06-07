@@ -14,6 +14,7 @@ import activityLogRouter from '../routes/activityLogRouter.mjs'
 import breathingActivityRouter from '../routes/breathingActivityRouter.mjs'
 import journalActivityRouter from '../routes/journalActivityRouter.mjs'
 import authMiddleware from '../middlewares/authMiddleware.mjs'
+import userHealthRouter from '../routes/userHealthRouter.mjs'
 
 export const web = express()
 web.use(express.json())
@@ -28,6 +29,7 @@ web.use('/api/v1', tokenRouter)
 web.use('/api/v1', shopItemRouter)
 web.use('/api/v1', itemRouter)
 web.use('/api/v1', userItemRouter)
+web.use('/api/v1', userHealthRouter)
 web.use('/api/v1', activityLogRouter)
 web.use('/api/v1', breathingActivityRouter)
 web.use('/api/v1', journalActivityRouter)
