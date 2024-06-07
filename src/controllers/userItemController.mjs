@@ -26,6 +26,18 @@ const getAllUserItems = async (req, res, next) => {
   }
 };
 
+const getUserInventory = async (req, res, next) => {
+  try {
+    const user_id = req.user.userId;
+    const userItems = await userItemService.fetchUserInventory(user_id);
+    res.status(success.HTTP.CODE.OK).send(
+      responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, userItems)
+    );
+  } catch (e) {
+    next(e);
+  }
+};
+
 const getUserItemDetail = async (req, res, next) => {
   try {
     const { user_id, item_id } = req.params;
@@ -91,6 +103,7 @@ const deleteUserItem = async (req, res, next) => {
 };
 
 export default {
+  getUserInventory,
   getInventoryDetail,
   getAllUserItems,
   getUserItemDetail,

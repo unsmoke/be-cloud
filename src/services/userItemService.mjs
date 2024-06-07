@@ -18,6 +18,14 @@ const fetchUserItemDetail = async (user_id, item_id) => {
   });
 };
 
+const fetchUserInventory = async (user_id) => {
+  return await prismaClient.userItem.findMany({
+    where: {
+      user_id: user_id,
+    },
+  });
+};
+
 const createUserItem = async (user_id, item_id) => {
   return await prismaClient.userItem.create({
     data: {
@@ -55,6 +63,7 @@ const removeUserItem = async (user_id, item_id) => {
 export default {
   fetchAllUserUserItems,
   fetchUserItemDetail,
+  fetchUserInventory,
   createUserItem,
   modifyUserItem,
   removeUserItem,

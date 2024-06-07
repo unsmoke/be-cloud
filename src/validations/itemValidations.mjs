@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-// Define the schema with custom messages for each field
 const itemSchema = Joi.object({
     name: Joi.string().required().messages({
         'string.base': 'Name should be a type of string',
