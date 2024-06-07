@@ -9,7 +9,7 @@ import bodyParser from 'body-parser'
 import tokenRouter from '../routes/tokenRouter.mjs'
 import shopRouter from '../routes/shopRouter.mjs'
 import itemRouter from '../routes/itemRouter.mjs'
-import inventoryRouter from '../routes/inventoryRouter.mjs'
+import userItemRouter from '../routes/userItemRouter.mjs'
 import activityLogRouter from '../routes/activityLogRouter.mjs'
 import breathingActivityRouter from '../routes/breathingActivityRouter.mjs'
 import journalActivityRouter from '../routes/journalActivityRouter.mjs'
@@ -27,7 +27,7 @@ web.use(authMiddleware)
 web.use('/api/v1', tokenRouter)
 web.use('/api/v1', shopRouter)
 web.use('/api/v1', itemRouter)
-web.use('/api/v1', inventoryRouter)
+web.use('/api/v1', userItemRouter)
 web.use('/api/v1', activityLogRouter)
 web.use('/api/v1', breathingActivityRouter)
 web.use('/api/v1', journalActivityRouter)
