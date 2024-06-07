@@ -25,7 +25,7 @@ model User {
   city               String?
   is_premium         Boolean         @default(false)
   created_at         DateTime        @default(now())
-  updated_at         DateTime        @updatedAt
+  updated_at         DateTime        @default(now()) @updatedAt
   user_items         UserItem[]
   shop_items         ShopItem[]
   activity_logs      ActivityLog[]
@@ -41,7 +41,7 @@ model Item {
   price       Float
   img_url     String
   created_at  DateTime   @default(now())
-  updated_at  DateTime   @updatedAt
+  updated_at  DateTime   @default(now()) @updatedAt
   user_items  UserItem[]
   shop_items  ShopItem[]
 }
@@ -52,7 +52,7 @@ model UserItem {
   user       User     @relation(fields: [user_id], references: [user_id])
   item       Item     @relation(fields: [item_id], references: [item_id])
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @default(now()) @updatedAt
 
   @@id([user_id, item_id])
 }
@@ -63,7 +63,7 @@ model ShopItem {
   user       User     @relation(fields: [user_id], references: [user_id])
   item       Item     @relation(fields: [item_id], references: [item_id])
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @default(now()) @updatedAt
 
   @@id([user_id, item_id])
 }
@@ -75,7 +75,7 @@ model ActivityLog {
   journal_id      Int?
   date            DateTime
   created_at      DateTime           @default(now())
-  updated_at      DateTime           @updatedAt
+  updated_at      DateTime           @default(now()) @updatedAt
   user            User               @relation(fields: [user_id], references: [user_id])
   breathing       BreathingActivity? @relation(fields: [breathing_id], references: [breathing_id])
   journal         JournalActivity?   @relation(fields: [journal_id], references: [journal_id])
@@ -86,7 +86,7 @@ model BreathingActivity {
   duration      Int
   reward        Float
   created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
+  updated_at    DateTime      @default(now()) @updatedAt
   activity_logs ActivityLog[]
 }
 
@@ -96,7 +96,7 @@ model JournalActivity {
   body          String
   reward        Float
   created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
+  updated_at    DateTime      @default(now()) @updatedAt
   activity_logs ActivityLog[]
 }
 
@@ -115,7 +115,7 @@ model UserHealth {
   cigarettes_per_pack  Int
   pack_price           Float
   created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
+  updated_at           DateTime @default(now()) @updatedAt
   user                 User     @relation(fields: [user_id], references: [user_id])
 
   @@id([user_id])
@@ -128,7 +128,7 @@ model UserPlan {
   original_cigarettes_quota Int[]
   is_active                 Boolean
   created_at                DateTime @default(now())
-  updated_at                DateTime @updatedAt
+  updated_at                DateTime @default(now()) @updatedAt
   user                      User     @relation(fields: [user_id], references: [user_id])
 
   @@id([user_id])
@@ -143,6 +143,6 @@ model UserMilestone {
   achieved_value Int
   date_achieved  DateTime
   created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  updated_at     DateTime @default(now()) @updatedAt
   user           User     @relation(fields: [user_id], references: [user_id])
 }
