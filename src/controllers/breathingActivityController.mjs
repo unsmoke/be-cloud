@@ -1,10 +1,10 @@
 import breathingActivityService from '../services/breathingActivityService.mjs'
-import { responseSuccess } from '../utils/responseAPI.mjs'
-import { success } from '../utils/messageSuccess.mjs'
+import {responseSuccess} from '../utils/responseAPI.mjs'
+import {success} from '../utils/messageSuccess.mjs'
 
-const getAll = async (req, res, next) => {
+const getAllBreathingActivities = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.getAll()
+        const result = await breathingActivityService.fetchAllBreathingActivities()
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -13,9 +13,9 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const getById = async (req, res, next) => {
+const getBreathingActivityById = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.getById(req.params.id)
+        const result = await breathingActivityService.fetchBreathingActivityById(req.params.id)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -24,9 +24,9 @@ const getById = async (req, res, next) => {
     }
 }
 
-const create = async (req, res, next) => {
+const createBreathingActivity = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.create(req.body)
+        const result = await breathingActivityService.createBreathingActivity(req.body)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )
@@ -35,9 +35,9 @@ const create = async (req, res, next) => {
     }
 }
 
-const update = async (req, res, next) => {
+const updateBreathingActivity = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.update(req.params.id, req.body)
+        const result = await breathingActivityService.updateBreathingActivity(req.params.id, req.body)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -46,13 +46,13 @@ const update = async (req, res, next) => {
     }
 }
 
-const remove = async (req, res, next) => {
+const deleteBreathingActivity = async (req, res, next) => {
     try {
-        await breathingActivityService.remove(req.params.id)
+        await breathingActivityService.deleteBreathingActivity(req.params.id)
         res.status(success.HTTP.CODE.NO_CONTENT).send()
     } catch (e) {
         next(e)
     }
 }
 
-export default { getAll, getById, create, update, remove }
+export default { getAllBreathingActivities, getBreathingActivityById, createBreathingActivity, updateBreathingActivity, deleteBreathingActivity }

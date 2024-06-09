@@ -1,12 +1,12 @@
-import { prismaClient } from '../app/db.mjs'
-import { ResponseError } from '../utils/responseError.mjs'
-import { errors } from '../utils/messageError.mjs'
+import {prismaClient} from '../app/db.mjs'
+import {ResponseError} from '../utils/responseError.mjs'
+import {errors} from '../utils/messageError.mjs'
 
-const getAll = async () => {
+const fetchAllActivityLogs = async () => {
     return prismaClient.activityLog.findMany()
 }
 
-const getById = async (id) => {
+const fetchActivityLogById = async (id) => {
     const activityLog = await prismaClient.activityLog.findUnique({
         where: { activity_log_id: parseInt(id) },
     })
@@ -20,19 +20,19 @@ const getById = async (id) => {
     return activityLog
 }
 
-const create = async (data) => {
+const createActivityLog = async (data) => {
     return prismaClient.activityLog.create({ data })
 }
 
-const update = async (id, data) => {
+const updateActivityLog = async (id, data) => {
     return prismaClient.activityLog.update({
         where: { activity_log_id: parseInt(id) },
         data,
     })
 }
 
-const remove = async (id) => {
+const deleteActivityLog = async (id) => {
     await prismaClient.activityLog.delete({ where: { activity_log_id: parseInt(id) } })
 }
 
-export default { getAll, getById, create, update, remove }
+export default { fetchAllActivityLogs, fetchActivityLogById, createActivityLog, updateActivityLog, deleteActivityLog }

@@ -1,10 +1,10 @@
 import journalActivityService from '../services/journalActivityService.mjs'
-import { responseSuccess } from '../utils/responseAPI.mjs'
-import { success } from '../utils/messageSuccess.mjs'
+import {responseSuccess} from '../utils/responseAPI.mjs'
+import {success} from '../utils/messageSuccess.mjs'
 
-const getAll = async (req, res, next) => {
+const getAllJournalActivities = async (req, res, next) => {
     try {
-        const result = await journalActivityService.getAll()
+        const result = await journalActivityService.fetchAllJournalActivities()
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -13,9 +13,9 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const getById = async (req, res, next) => {
+const getJournalActivityById = async (req, res, next) => {
     try {
-        const result = await journalActivityService.getById(req.params.id)
+        const result = await journalActivityService.fetchJournalActivityById(req.params.id)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -24,9 +24,9 @@ const getById = async (req, res, next) => {
     }
 }
 
-const create = async (req, res, next) => {
+const createJournalActivity = async (req, res, next) => {
     try {
-        const result = await journalActivityService.create(req.body)
+        const result = await journalActivityService.createJournalActivity(req.body)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )
@@ -35,9 +35,9 @@ const create = async (req, res, next) => {
     }
 }
 
-const update = async (req, res, next) => {
+const updateJournalActivity = async (req, res, next) => {
     try {
-        const result = await journalActivityService.update(req.params.id, req.body)
+        const result = await journalActivityService.updateJournalActivity(req.params.id, req.body)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -46,13 +46,13 @@ const update = async (req, res, next) => {
     }
 }
 
-const remove = async (req, res, next) => {
+const deleteJournalActivity = async (req, res, next) => {
     try {
-        await journalActivityService.remove(req.params.id)
+        await journalActivityService.deleteJournalActivity(req.params.id)
         res.status(success.HTTP.CODE.OK).send()
     } catch (e) {
         next(e)
     }
 }
 
-export default { getAll, getById, create, update, remove }
+export default { getAllJournalActivities, getJournalActivityById, createJournalActivity, updateJournalActivity, deleteJournalActivity }

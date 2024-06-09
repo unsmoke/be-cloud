@@ -1,10 +1,10 @@
 import activityLogService from '../services/activityLogService.mjs'
-import { responseSuccess } from '../utils/responseAPI.mjs'
-import { success } from '../utils/messageSuccess.mjs'
+import {responseSuccess} from '../utils/responseAPI.mjs'
+import {success} from '../utils/messageSuccess.mjs'
 
-const getAll = async (req, res, next) => {
+const getAllActivityLogs = async (req, res, next) => {
     try {
-        const result = await activityLogService.getAll()
+        const result = await activityLogService.fetchAllActivityLogs()
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -13,9 +13,9 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const getById = async (req, res, next) => {
+const getActivityLogById = async (req, res, next) => {
     try {
-        const result = await activityLogService.getById(req.params.id)
+        const result = await activityLogService.fetchActivityLogById(req.params.id)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -24,9 +24,9 @@ const getById = async (req, res, next) => {
     }
 }
 
-const create = async (req, res, next) => {
+const createActivityLog = async (req, res, next) => {
     try {
-        const result = await activityLogService.create(req.body)
+        const result = await activityLogService.createActivityLog(req.body)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )
@@ -35,9 +35,9 @@ const create = async (req, res, next) => {
     }
 }
 
-const update = async (req, res, next) => {
+const updateActivityLog = async (req, res, next) => {
     try {
-        const result = await activityLogService.update(req.params.id, req.body)
+        const result = await activityLogService.updateActivityLog(req.params.id, req.body)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -46,13 +46,13 @@ const update = async (req, res, next) => {
     }
 }
 
-const remove = async (req, res, next) => {
+const deleteActivityLog = async (req, res, next) => {
     try {
-        await activityLogService.remove(req.params.id)
+        await activityLogService.deleteActivityLog(req.params.id)
         res.status(success.HTTP.CODE.NO_CONTENT).send()
     } catch (e) {
         next(e)
     }
 }
 
-export default { getAll, getById, create, update, remove }
+export default { getAllActivityLogs, getActivityLogById, createActivityLog, updateActivityLog, deleteActivityLog }

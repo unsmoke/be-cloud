@@ -1,9 +1,9 @@
 import express from 'express'
 import cors from 'cors'
-import { errorMiddleware } from '../middlewares/errorMiddleware.mjs'
-import { checkDBMiddleware } from '../middlewares/checkDBMiddleware.mjs'
-import { errors } from '../utils/messageError.mjs'
-import { responseError } from '../utils/responseAPI.mjs'
+import {errorMiddleware} from '../middlewares/errorMiddleware.mjs'
+import {checkDBMiddleware} from '../middlewares/checkDBMiddleware.mjs'
+import {errors} from '../utils/messageError.mjs'
+import {responseError} from '../utils/responseAPI.mjs'
 import userRouter from '../routes/userRouter.mjs'
 import bodyParser from 'body-parser'
 import tokenRouter from '../routes/tokenRouter.mjs'
@@ -13,7 +13,6 @@ import userItemRouter from '../routes/userItemRouter.mjs'
 import activityLogRouter from '../routes/activityLogRouter.mjs'
 import breathingActivityRouter from '../routes/breathingActivityRouter.mjs'
 import journalActivityRouter from '../routes/journalActivityRouter.mjs'
-import authMiddleware from '../middlewares/authMiddleware.mjs'
 import userHealthRouter from '../routes/userHealthRouter.mjs'
 
 export const web = express()
@@ -23,7 +22,6 @@ web.use(checkDBMiddleware)
 web.use(bodyParser.urlencoded({ extended: true }))
 
 web.use('/api/v1', userRouter)
-web.use(authMiddleware)
 
 web.use('/api/v1', tokenRouter)
 web.use('/api/v1', shopItemRouter)

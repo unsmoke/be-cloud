@@ -3,10 +3,10 @@ import breathingActivityController from '../controllers/breathingActivityControl
 
 const breathingActivityRouter = express.Router()
 
-breathingActivityRouter.get('/', breathingActivityController.getAll)
-breathingActivityRouter.get('/:id', breathingActivityController.getById)
-breathingActivityRouter.post('/', breathingActivityController.create)
-breathingActivityRouter.put('/:id', breathingActivityController.update)
-breathingActivityRouter.delete('/:id', breathingActivityController.remove)
+breathingActivityRouter.get('/breathing-activities', breathingActivityController.getAllBreathingActivities)
+breathingActivityRouter.get('/breathing-activities/:id', breathingActivityController.getBreathingActivityById)
+breathingActivityRouter.post('/breathing-activities', breathingActivityController.createBreathingActivity)
+breathingActivityRouter.put('/breathing-activities/:id', breathingActivityController.updateBreathingActivity)
+breathingActivityRouter.delete('/breathing-activities/:id', breathingActivityController.deleteBreathingActivity)
 
 export default breathingActivityRouter
