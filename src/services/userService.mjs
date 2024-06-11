@@ -63,7 +63,7 @@ const loginUser = async (requestBody) => {
 
     const refreshToken = tokenService.generateRefreshToken(payload)
 
-    return { accessToken, refreshToken }
+    return { user_id: user.user_id, accessToken, refreshToken }
 }
 
 export default { registerUser, loginUser }

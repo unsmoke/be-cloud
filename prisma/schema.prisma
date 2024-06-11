@@ -106,10 +106,10 @@ model UserHealth {
   gender               String
   smoking_start_time   Int
   is_nicotine_med      Boolean
-  is_e_cigarette       Boolean
+  is_e_cigarette       Int
   first_cigarette_date DateTime
   is_depressed         Boolean
-  is_other_tobacco     Boolean
+  is_other_tobacco     Int
   is_spirit            Boolean
   cigarettes_per_day   Int
   cigarettes_per_pack  Int

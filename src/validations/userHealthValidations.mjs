@@ -18,8 +18,8 @@ const userHealthSchema = Joi.object({
     'boolean.base': 'Is Nicotine Med should be a boolean',
     'any.required': 'Is Nicotine Med is a required field'
   }),
-  is_e_cigarette: Joi.boolean().required().messages({
-    'boolean.base': 'Is E-Cigarette should be a boolean',
+  is_e_cigarette: Joi.number().required().messages({
+    'number.base': 'Is E-Cigarette should be a number',
     'any.required': 'Is E-Cigarette is a required field'
   }),
   first_cigarette_date: Joi.date().required().messages({
@@ -30,8 +30,8 @@ const userHealthSchema = Joi.object({
     'boolean.base': 'Is Depressed should be a boolean',
     'any.required': 'Is Depressed is a required field'
   }),
-  is_other_tobacco: Joi.boolean().required().messages({
-    'boolean.base': 'Is Other Tobacco should be a boolean',
+  is_other_tobacco: Joi.number().required().messages({
+    'number.base': 'Is Other Tobacco should be a number',
     'any.required': 'Is Other Tobacco is a required field'
   }),
   is_spirit: Joi.boolean().required().messages({
