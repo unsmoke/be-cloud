@@ -27,7 +27,7 @@ const createUserHealth = async (data, user_id) => {
   
   await prismaClient.user.update({
     where: {
-      user_id: user_id, // Corrected the key from user_id to id
+      user_id: user_id,
     },
     data: {
       province: data.province,
