@@ -19,11 +19,27 @@ const fetchUserItemDetail = async (user_id, item_id) => {
 };
 
 const fetchUserInventory = async (user_id) => {
-  return await prismaClient.userItem.findMany({
+  const inventoryItems = await prismaClient.userItem.findMany({
     where: {
       user_id: user_id,
     },
+    include: {
+      item: true
+    }
   });
+
+  return inventoryItems.map(item => ({
+    item_id: item.item.item_id,
+    name: item.item.name,
+    description: item.item.description,
+    price: item.item.price,
+    img_url: item.item.img_url,
+    created_at: item.item.created_at,
+    updated_at: item.item.updated_at,
+  }));
+
+
+
 };
 
 const createUserItem = async (user_id, item_id) => {

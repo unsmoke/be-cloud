@@ -3,18 +3,6 @@ import { responseSuccess, responseError } from '../utils/responseAPI.mjs';
 import { success } from '../utils/messageSuccess.mjs';
 import { errors } from '../utils/messageError.mjs'
 
-
-const getInventoryDetail = async (req, res, next) => {
-  try {
-    const result = await userItemService.fetchAllUserUserItems();
-    res.status(success.HTTP.CODE.OK).send(
-      responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
-    );
-  } catch (e) {
-    next(e);
-  }
-};
-
 const getAllUserItems = async (req, res, next) => {
   try {
     const userItems = await userItemService.fetchAllUserUserItems();
@@ -26,7 +14,7 @@ const getAllUserItems = async (req, res, next) => {
   }
 };
 
-const getUserInventory = async (req, res, next) => {
+const getUserItems = async (req, res, next) => {
   try {
     const user_id = req.user.userId;
     const userItems = await userItemService.fetchUserInventory(user_id);
@@ -103,8 +91,7 @@ const deleteUserItem = async (req, res, next) => {
 };
 
 export default {
-  getUserInventory,
-  getInventoryDetail,
+  getUserItems,
   getAllUserItems,
   getUserItemDetail,
   createUserItem,

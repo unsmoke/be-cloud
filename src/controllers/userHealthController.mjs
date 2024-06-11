@@ -35,8 +35,9 @@ const getUserHealthDetail = async (req, res, next) => {
 
 const createUserHealth = async (req, res, next) => {
   try {
+    const user_id = req.user.userId;
     const data = req.body;
-    const newUserHealth = await userHealthService.createUserHealth(data);
+    const newUserHealth = await userHealthService.createUserHealth(data, user_id);
 
     res.status(success.HTTP.CODE.CREATED).send(
       responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, newUserHealth)

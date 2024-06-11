@@ -71,7 +71,7 @@ const updateShopItem = async (req, res, next) => {
       );
     }
 
-    const updatedShopItem = await shopItemService.updateShopItem(user_id, item_id, new_item_id);
+    const updatedShopItem = await shopItemService.modifyShopItem(user_id, item_id, new_item_id);
     res.status(success.HTTP.CODE.OK).send(
       responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, updatedShopItem)
     );
@@ -92,7 +92,7 @@ const deleteShopItem = async (req, res, next) => {
       );
     }
 
-    await shopItemService.deleteShopItem(user_id, item_id);
+    await shopItemService.removeShopItem(user_id, item_id);
     res.status(success.HTTP.CODE.NO_CONTENT).send();
   } catch (error) {
     next(error);

@@ -1,14 +1,8 @@
 import Joi from 'joi';
 
 const userHealthSchema = Joi.object({
-  user_id: Joi.string().guid({ version: 'uuidv4' }).required().messages({
-    'string.base': 'User ID should be a type of string',
-    'string.guid': 'User ID should be a valid UUID',
-    'string.empty': 'User ID cannot be an empty field',
-    'any.required': 'User ID is a required field'
-  }),
   date_of_birth: Joi.date().required().messages({
-    'date.base': 'Date of Birth should be a valid date',
+    'string.base': 'Date of Birth should be a valid date',
     'any.required': 'Date of Birth is a required field'
   }),
   gender: Joi.string().required().messages({
@@ -29,7 +23,7 @@ const userHealthSchema = Joi.object({
     'any.required': 'Is E-Cigarette is a required field'
   }),
   first_cigarette_date: Joi.date().required().messages({
-    'date.base': 'First Cigarette Date should be a valid date',
+    'string.base': 'First Cigarette Date should be a valid date',
     'any.required': 'First Cigarette Date is a required field'
   }),
   is_depressed: Joi.boolean().required().messages({
@@ -55,6 +49,14 @@ const userHealthSchema = Joi.object({
   pack_price: Joi.number().precision(2).required().messages({
     'number.base': 'Pack Price should be a number',
     'any.required': 'Pack Price is a required field'
+  }),
+  province: Joi.string().required().messages({
+    'string.base': 'Province should be a string',
+    'any.required': 'Province is a required field'
+  }),
+  city: Joi.string().required().messages({
+    'string.base': 'City should be a string',
+    'any.required': 'City is a required field'
   }),
 });
 
