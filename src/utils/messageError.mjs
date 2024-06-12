@@ -46,6 +46,16 @@ const ITEM = {
     NOT_FOUND: 'item not found',
 }
 
+const ACTIVITY_LOG = {
+    ID: {
+        IS_REQUIRED: 'please specify the activity log id',
+        MUST_BE_NUMBER: 'activity log id must be a valid number',
+        MUST_BE_VALID: 'activity log id must be a valid',
+        MUST_BE_POSITIVE: 'activity log id must be a positive number',
+        CANNOT_BE_EMPTY: 'activity log id cannot be left empty',
+    },
+}
+
 export const errors = {
     HTTP: httpErrors,
     DATABASE: DATABASE,
@@ -53,4 +63,5 @@ export const errors = {
     USER: USER,
     AUTHORIZATION: AUTHORIZATION,
     ITEM: ITEM,
+    ACTIVITY_LOG: ACTIVITY_LOG,
 }
