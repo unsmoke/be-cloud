@@ -1,6 +1,6 @@
 import activityLogService from '../services/activityLogService.mjs'
-import {responseSuccess} from '../utils/responseAPI.mjs'
-import {success} from '../utils/messageSuccess.mjs'
+import { responseSuccess } from '../utils/responseAPI.mjs'
+import { success } from '../utils/messageSuccess.mjs'
 
 const getAllActivityLogs = async (req, res, next) => {
     try {
@@ -55,4 +55,10 @@ const deleteActivityLog = async (req, res, next) => {
     }
 }
 
-export default { getAllActivityLogs, getActivityLogById, createActivityLog, updateActivityLog, deleteActivityLog }
+export default {
+    getAllActivityLogs,
+    getActivityLogById,
+    createActivityLog,
+    updateActivityLog,
+    deleteActivityLog,
+}

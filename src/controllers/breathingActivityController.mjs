@@ -1,6 +1,6 @@
 import breathingActivityService from '../services/breathingActivityService.mjs'
-import {responseSuccess} from '../utils/responseAPI.mjs'
-import {success} from '../utils/messageSuccess.mjs'
+import { responseSuccess } from '../utils/responseAPI.mjs'
+import { success } from '../utils/messageSuccess.mjs'
 
 const getAllBreathingActivities = async (req, res, next) => {
     try {
@@ -26,7 +26,7 @@ const getBreathingActivityById = async (req, res, next) => {
 
 const createBreathingActivity = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.createBreathingActivity(req.body)
+        const result = await breathingActivityService.createBreathingActivity(req)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )
@@ -37,7 +37,10 @@ const createBreathingActivity = async (req, res, next) => {
 
 const updateBreathingActivity = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.updateBreathingActivity(req.params.id, req.body)
+        const result = await breathingActivityService.updateBreathingActivity(
+            req.params.id,
+            req.body
+        )
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -55,4 +58,10 @@ const deleteBreathingActivity = async (req, res, next) => {
     }
 }
 
-export default { getAllBreathingActivities, getBreathingActivityById, createBreathingActivity, updateBreathingActivity, deleteBreathingActivity }
+export default {
+    getAllBreathingActivities,
+    getBreathingActivityById,
+    createBreathingActivity,
+    updateBreathingActivity,
+    deleteBreathingActivity,
+}

@@ -1,6 +1,6 @@
 import journalActivityService from '../services/journalActivityService.mjs'
-import {responseSuccess} from '../utils/responseAPI.mjs'
-import {success} from '../utils/messageSuccess.mjs'
+import { responseSuccess } from '../utils/responseAPI.mjs'
+import { success } from '../utils/messageSuccess.mjs'
 
 const getAllJournalActivities = async (req, res, next) => {
     try {
@@ -26,7 +26,7 @@ const getJournalActivityById = async (req, res, next) => {
 
 const createJournalActivity = async (req, res, next) => {
     try {
-        const result = await journalActivityService.createJournalActivity(req.body)
+        const result = await journalActivityService.createJournalActivity(req)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )
@@ -55,4 +55,10 @@ const deleteJournalActivity = async (req, res, next) => {
     }
 }
 
-export default { getAllJournalActivities, getJournalActivityById, createJournalActivity, updateJournalActivity, deleteJournalActivity }
+export default {
+    getAllJournalActivities,
+    getJournalActivityById,
+    createJournalActivity,
+    updateJournalActivity,
+    deleteJournalActivity,
+}
