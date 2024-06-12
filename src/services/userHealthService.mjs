@@ -52,8 +52,8 @@ const createUserHealth = async (data, user_id) => {
       data.is_other_tobacco === 4 ? 1 : 0,
       data.is_spirit ? 1 : 0,
       !data.is_spirit ? 1 : 0,
-      1,
-      0
+      data.last_7_days ? 1 : 0,
+      !data.last_7_days ? 1 : 0,
     ];
     console.log("inputData: ", inputData);
     predictions = await predict(inputData);
