@@ -1,6 +1,6 @@
-import {prismaClient} from '../app/db.mjs'
-import {ResponseError} from '../utils/responseError.mjs'
-import {errors} from '../utils/messageError.mjs'
+import { prismaClient } from '../app/db.mjs'
+import { ResponseError } from '../utils/responseError.mjs'
+import { errors } from '../utils/messageError.mjs'
 
 const fetchAllBreathingActivities = async () => {
     return prismaClient.breathingActivity.findMany()
@@ -35,4 +35,10 @@ const deleteBreathingActivity = async (id) => {
     await prismaClient.breathingActivity.delete({ where: { breathing_id: parseInt(id) } })
 }
 
-export default { fetchAllBreathingActivities, fetchBreathingActivityById, createBreathingActivity, updateBreathingActivity, deleteBreathingActivity }
+export default {
+    fetchAllBreathingActivities,
+    fetchBreathingActivityById,
+    createBreathingActivity,
+    updateBreathingActivity,
+    deleteBreathingActivity,
+}
