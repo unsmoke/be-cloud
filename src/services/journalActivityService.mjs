@@ -1,6 +1,6 @@
-import {prismaClient} from '../app/db.mjs'
-import {ResponseError} from '../utils/responseError.mjs'
-import {errors} from '../utils/messageError.mjs'
+import { prismaClient } from '../app/db.mjs'
+import { ResponseError } from '../utils/responseError.mjs'
+import { errors } from '../utils/messageError.mjs'
 
 const fetchAllJournalActivities = async () => {
     return prismaClient.journalActivity.findMany()
@@ -35,4 +35,10 @@ const deleteJournalActivity = async (id) => {
     await prismaClient.journalActivity.delete({ where: { journal_id: parseInt(id) } })
 }
 
-export default { fetchAllJournalActivities, fetchJournalActivityById, createJournalActivity, updateJournalActivity, deleteJournalActivity }
+export default {
+    fetchAllJournalActivities,
+    fetchJournalActivityById,
+    createJournalActivity,
+    updateJournalActivity,
+    deleteJournalActivity,
+}
