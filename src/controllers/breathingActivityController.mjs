@@ -26,7 +26,7 @@ const getBreathingActivityById = async (req, res, next) => {
 
 const createBreathingActivity = async (req, res, next) => {
     try {
-        const result = await breathingActivityService.createBreathingActivity(req.body)
+        const result = await breathingActivityService.createBreathingActivity(req)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )

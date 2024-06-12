@@ -128,7 +128,7 @@ const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id
     }
 
     return prismaClient.$transaction(async (prisma) => {
-        return prisma.activityLog.upsert({
+        const activityLog = await prisma.activityLog.upsert({
             where: {
                 AND: [
                     { user_id },
@@ -143,6 +143,36 @@ const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id
             update: data,
             create: data,
         })
+
+        const user = await prisma.user.findUnique({ where: { user_id } })
+        const userHealth = await prisma.userHealth.findUnique({ where: { user_id } })
+
+        let updateData = { exp: user.exp }
+
+        if (breathing_id && journal_id) {
+            const cigarettesPerDay = userHealth.cigarettes_per_day
+            const cigarettesAvoidedToday = cigarettesPerDay / 24 // Assuming even distribution of smoking throughout the day
+
+            updateData = {
+                ...updateData,
+                streak_count: user.streak_count + 1,
+                money_saved:
+                    user.money_saved +
+                    (userHealth.pack_price / userHealth.cigarettes_per_pack) *
+                        cigarettesAvoidedToday,
+                cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
+                cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
+            }
+        } else if (breathing_id || journal_id) {
+            updateData.exp += 10 // Example value
+        }
+
+        await prisma.user.update({
+            where: { user_id },
+            data: updateData,
+        })
+
+        return activityLog
     })
 }
 
