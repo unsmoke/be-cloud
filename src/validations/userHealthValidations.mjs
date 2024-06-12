@@ -58,6 +58,15 @@ const userHealthSchema = Joi.object({
     'string.base': 'City should be a string',
     'any.required': 'City is a required field'
   }),
+  last_7_days: Joi.boolean().required().messages({
+    'boolean.base': 'Last 7 days should be a boolean',
+    'any.required': 'Last 7 days is a required field'
+  }),
+  motivation: Joi.string().max(1000).required().messages({
+    'string.base': 'Motivation should be a string',
+    'string.max': 'Motivation should not exceed 1000 characters',
+    'any.required': 'Motivation is a required field'
+  })
 });
 
 const validateUserHealth = (req, res, next) => {
