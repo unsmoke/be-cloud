@@ -1,6 +1,9 @@
 import { prismaClient } from '../app/db.mjs'
 import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
+import { validate } from 'uuid'
+import { createJournalActivitySchema } from '../validations/journalActivityValidations.mjs'
+import activityLogService from './activityLogService.mjs'
 
 const fetchAllJournalActivities = async () => {
     return prismaClient.journalActivity.findMany()
@@ -20,8 +23,26 @@ const fetchJournalActivityById = async (id) => {
     return journalActivity
 }
 
-const createJournalActivity = async (data) => {
-    return prismaClient.journalActivity.create({ data })
+const createJournalActivity = async (req) => {
+    const { title, body, reward, user_id, date } = validate(createJournalActivitySchema, req.body)
+
+    return prismaClient.$transaction(async (prisma) => {
+        const journalActivity = await prisma.journalActivity.create({
+            data: {
+                title,
+                body,
+                reward,
+            },
+        })
+
+        await activityLogService.createOrUpdateActivityLog({
+            user_id,
+            journal_id: journalActivity.journal_id,
+            date,
+        })
+
+        return journalActivity
+    })
 }
 
 const updateJournalActivity = async (id, data) => {

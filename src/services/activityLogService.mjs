@@ -125,6 +125,8 @@ const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id
         date,
         ...(breathing_id && { breathing_id }),
         ...(journal_id && { journal_id }),
+        created_at: Math.floor(Date.now() / 1000),
+        updated_at: Math.floor(Date.now() / 1000),
     }
 
     return prismaClient.$transaction(async (prisma) => {

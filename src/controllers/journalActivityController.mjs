@@ -26,7 +26,7 @@ const getJournalActivityById = async (req, res, next) => {
 
 const createJournalActivity = async (req, res, next) => {
     try {
-        const result = await journalActivityService.createJournalActivity(req.body)
+        const result = await journalActivityService.createJournalActivity(req)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
         )

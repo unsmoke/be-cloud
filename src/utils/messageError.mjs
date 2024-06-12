@@ -56,6 +56,57 @@ const ACTIVITY_LOG = {
     },
 }
 
+const BREATHING_ACTIVITY = {
+    DURATION: {
+        REQUIRED: 'duration is required',
+        BASE: 'duration must be a number',
+        POSITIVE: 'duration must be a positive number',
+    },
+    REWARD: {
+        REQUIRED: 'reward is required',
+        BASE: 'reward must be a number',
+        POSITIVE: 'reward must be a positive number',
+    },
+    USER_ID: {
+        REQUIRED: 'user id is required',
+        EMPTY: 'user id cannot be empty',
+        BASE: 'user id must be a valid string',
+    },
+    DATE: {
+        REQUIRED: 'date is required',
+        BASE: 'date must be a number',
+        INTEGER: 'date must be an integer',
+    },
+}
+
+const JOURNAL_ACTIVITY = {
+    TITLE: {
+        REQUIRED: 'title is required',
+        EMPTY: 'title cannot be empty',
+        BASE: 'title must be a valid string',
+    },
+    BODY: {
+        REQUIRED: 'body is required',
+        EMPTY: 'body cannot be empty',
+        BASE: 'body must be a valid string',
+    },
+    REWARD: {
+        REQUIRED: 'reward is required',
+        BASE: 'reward must be a number',
+        POSITIVE: 'reward must be a positive number',
+    },
+    USER_ID: {
+        REQUIRED: 'user id is required',
+        EMPTY: 'user id cannot be empty',
+        BASE: 'user id must be a valid string',
+    },
+    DATE: {
+        REQUIRED: 'date is required',
+        BASE: 'date must be a number',
+        INTEGER: 'date must be an integer',
+    },
+}
+
 export const errors = {
     HTTP: httpErrors,
     DATABASE: DATABASE,
@@ -64,4 +115,6 @@ export const errors = {
     AUTHORIZATION: AUTHORIZATION,
     ITEM: ITEM,
     ACTIVITY_LOG: ACTIVITY_LOG,
+    BREATHING_ACTIVITY: BREATHING_ACTIVITY,
+    JOURNAL_ACTIVITY: JOURNAL_ACTIVITY,
 }
