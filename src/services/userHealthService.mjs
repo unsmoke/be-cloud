@@ -20,8 +20,8 @@ const fetchUserHealthDetail = async (user_id) => {
 }
 
 const createUserHealth = async (data, user_id) => {
-    const ageInYears = calculateAgeFromEpoch(data.date_of_birth)
-    const smokingYears = calculateAgeFromEpoch(data.first_cigarette_date)
+    const ageInYears = calculateAgeFromEpoch(parseInt(data.date_of_birth))
+    const smokingYears = calculateAgeFromEpoch(parseInt(data.first_cigarette_date))
 
     if (isNaN(ageInYears) || isNaN(smokingYears)) {
         throw new Error('Invalid dates provided')
@@ -32,8 +32,8 @@ const createUserHealth = async (data, user_id) => {
     try {
         await loadModel()
         const inputData = [
-            data.cigarettes_per_day,
-            data.smoking_start_time,
+            parseInt(data.cigarettes_per_day),
+            parseInt(data.smoking_start_time),
             data.is_nicotine_med ? 1 : 0,
             !data.is_nicotine_med ? 1 : 0,
             data.is_e_cigarette === 1 ? 1 : 0,
@@ -55,9 +55,8 @@ const createUserHealth = async (data, user_id) => {
             data.last_7_days ? 1 : 0,
             !data.last_7_days ? 1 : 0,
         ]
-        console.log('inputData: ', inputData)
+
         predictions = await predict(inputData)
-        console.log(predictions)
 
         if (!(predictions instanceof Float32Array)) {
             throw new Error('Invalid predictions format')
@@ -67,13 +66,6 @@ const createUserHealth = async (data, user_id) => {
     }
 
     predictions = Array.from(predictions)
-
-    if (data.date_of_birth) {
-        data.date_of_birth = epochToIso(data.date_of_birth)
-    }
-    if (data.first_cigarette_date) {
-        data.first_cigarette_date = epochToIso(data.first_cigarette_date)
-    }
 
     await prismaClient.user.update({
         where: {
@@ -87,12 +79,42 @@ const createUserHealth = async (data, user_id) => {
 
     const { province, city, ...userHealthData } = data
 
-    await prismaClient.userHealth.create({
-        data: {
-            ...userHealthData,
-            user_id: user_id,
-        },
-    })
+    const processedData = {
+        ...userHealthData,
+        date_of_birth: epochToIso(parseInt(userHealthData.date_of_birth)), // Convert to ISO-8601 DateTime format
+        first_cigarette_date: epochToIso(parseInt(userHealthData.first_cigarette_date)), // Convert to ISO-8601 DateTime format
+        smoking_start_time: parseInt(userHealthData.smoking_start_time, 10), // Convert to integer
+        is_nicotine_med: userHealthData.is_nicotine_med === 'true', // Convert to boolean
+        is_depressed: userHealthData.is_depressed === 'true', // Convert to boolean
+        is_spirit: userHealthData.is_spirit === 'true', // Convert to boolean
+        last_7_days: userHealthData.last_7_days === 'true', // Convert to boolean
+        is_e_cigarette: parseInt(userHealthData.is_e_cigarette, 10), // Convert to integer
+        is_other_tobacco: parseInt(userHealthData.is_other_tobacco, 10), // Convert to integer
+        cigarettes_per_day: parseInt(userHealthData.cigarettes_per_day, 10), // Convert to integer
+        cigarettes_per_pack: parseInt(userHealthData.cigarettes_per_pack, 10), // Convert to integer
+        pack_price: parseFloat(userHealthData.pack_price), // Convert to float
+    }
+
+    try {
+        const existingRecord = await prismaClient.userHealth.findUnique({
+            where: {
+                user_id: user_id,
+            },
+        })
+
+        if (existingRecord) {
+            throw new Error('Duplicate')
+        } else {
+            const newUserHealth = await prismaClient.userHealth.create({
+                data: {
+                    ...processedData,
+                    user_id: user_id,
+                },
+            })
+        }
+    } catch (error) {
+        throw new Error(error)
+    }
 
     const optimalPlanIndex = predictions.reduce(
         (closestIndex, currentValue, currentIndex, array) => {
@@ -108,8 +130,8 @@ const createUserHealth = async (data, user_id) => {
         const cigarettesQuotaGeneration = await geneticAlgorithm(
             1000,
             100,
-            dayCount,
-            data.cigarettes_per_day,
+            parseInt(dayCount),
+            parseInt(data.cigarettes_per_day),
             0
         )
         await prismaClient.userPlan.create({
