@@ -40,6 +40,14 @@ const USER = {
     NOT_FOUND: 'user not found',
     EMAIL_ALREADY_EXISTS: 'the email address is already in use',
     INSUFFICIENT_BALANCE: 'you do not have enough balance',
+    ID: {
+        IS_REQUIRED: 'please specify the user id',
+        MUST_BE_NUMBER: 'user id must be a valid number',
+        MUST_BE_VALID: 'user id must be a valid',
+        MUST_BE_POSITIVE: 'user id must be a positive number',
+        CANNOT_BE_EMPTY: 'user id cannot be left empty',
+        MUST_BE_STRING: 'user id must be a string',
+    },
 }
 
 const ITEM = {
@@ -140,6 +148,12 @@ const USER_MILESTONE = {
     },
 }
 
+const RELAPSE = {
+    USER_NOT_FOUND: 'user not found',
+    PLAN_NOT_FOUND: 'user plan not found',
+    RELAPSE_FAILED: 'failed to process relapse',
+}
+
 export const errors = {
     HTTP: httpErrors,
     DATABASE,
@@ -151,4 +165,5 @@ export const errors = {
     BREATHING_ACTIVITY,
     JOURNAL_ACTIVITY,
     USER_MILESTONE,
+    RELAPSE,
 }

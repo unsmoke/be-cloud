@@ -18,6 +18,7 @@ import leaderboardRouter from '../routes/leaderboardRouter.mjs'
 import locationRouter from '../routes/locationRouter.mjs'
 import userPlanRouter from '../routes/userPlanRouter.mjs'
 import userMilestoneRouter from '../routes/userMilestoneRouter.mjs'
+import relapseRouter from '../routes/relapseRouter.mjs'
 
 export const web = express()
 web.use(express.json())
@@ -39,6 +40,7 @@ web.use('/api/v1', journalActivityRouter)
 web.use('/api/v1', leaderboardRouter)
 web.use('/api/v1', userPlanRouter)
 web.use('/api/v1', userMilestoneRouter)
+web.use('/api/v1', relapseRouter)
 
 web.use(errorMiddleware)
 
