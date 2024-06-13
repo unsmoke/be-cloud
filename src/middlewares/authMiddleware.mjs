@@ -13,8 +13,8 @@ const authMiddleware = (req, res, next) => {
             .status(errors.HTTP.CODE.INTERNAL_SERVER_ERROR)
             .send(
                 responseError(
-                    errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
-                    errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
+                    errors.HTTP.CODE.UNAUTHORIZED,
+                    errors.HTTP.STATUS.UNAUTHORIZED,
                     errors.HTTP.MESSAGE.UNAUTHORIZED
                 )
             )
@@ -31,8 +31,8 @@ const authMiddleware = (req, res, next) => {
             .status(errors.HTTP.CODE.INTERNAL_SERVER_ERROR)
             .send(
                 responseError(
-                    errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
-                    errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
+                    errors.HTTP.CODE.UNAUTHORIZED,
+                    errors.HTTP.STATUS.UNAUTHORIZED,
                     errors.HTTP.MESSAGE.UNAUTHORIZED
                 )
             )
