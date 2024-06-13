@@ -7,6 +7,7 @@ import seedJournalActivities from './journalActivitySeeder.mjs'
 import seedUserHealths from './userHealthSeeder.mjs'
 import seedUserPlans from './userPlanSeeder.mjs'
 import seedUserMilestones from './userMilestoneSeeder.mjs'
+import seedUserRelapses from './userRelapseSeeder.mjs'
 import { logger } from '../../src/app/logging.mjs'
 
 const seed = async () => {
@@ -19,6 +20,7 @@ const seed = async () => {
     await seedUserHealths()
     await seedUserPlans()
     await seedUserMilestones()
+    await seedUserRelapses()
 }
 
 seed().catch((e) => {
