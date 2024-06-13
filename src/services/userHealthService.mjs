@@ -115,8 +115,15 @@ const createUserHealth = async (data, user_id) => {
     } catch (error) {
         throw new Error(error)
     }
+    
+    const predictionsLen2 =
+    Math.abs(predictions[0] - 1) < Math.abs(predictions[2] - 1) ||
+    Math.abs(predictions[1] - 1) < Math.abs(predictions[2] - 1)
+    ? [1, 0]
+    : [0, 1]
+    
 
-    const optimalPlanIndex = predictions.reduce(
+    const optimalPlanIndex = predictionsLen2.reduce(
         (closestIndex, currentValue, currentIndex, array) => {
             return Math.abs(currentValue - 1) < Math.abs(array[closestIndex] - 1)
                 ? currentIndex
@@ -125,8 +132,8 @@ const createUserHealth = async (data, user_id) => {
         0
     )
 
-    for (let i = 0; i < predictions.length; i++) {
-        const dayCount = i === 0 || i == 1 ? 30 : 90
+    for (let i = 0; i < predictionsLen2.length; i++) {
+        const dayCount = i === 0 ? 30 : 90
         const cigarettesQuotaGeneration = await geneticAlgorithm(
             1000,
             100,
@@ -138,14 +145,15 @@ const createUserHealth = async (data, user_id) => {
             data: {
                 user_id: user_id,
                 duration: dayCount,
-                probability: predictions[i],
+                probability: predictionsLen2[i],
                 original_cigarettes_quota: cigarettesQuotaGeneration,
                 is_active: optimalPlanIndex === i,
             },
         })
     }
 
-    return predictions
+    return predictionsLen2
+    
 }
 
 const updateUserHealth = async (user_id, data) => {

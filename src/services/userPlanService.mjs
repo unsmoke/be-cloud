@@ -43,7 +43,7 @@ const modifyUserPlanIsActive = async (data, user_id) => {
 
         const updatedPlan = await prismaClient.userPlan.update({
             where: {
-                plan_id: plan_id,
+                plan_id: parseInt(plan_id),
             },
             data: {
                 is_active: true,
