@@ -107,14 +107,48 @@ const JOURNAL_ACTIVITY = {
     },
 }
 
+const USER_MILESTONE = {
+    TITLE: {
+        REQUIRED: 'title is required',
+        EMPTY: 'title cannot be empty',
+        BASE: 'title must be a valid string',
+    },
+    DESCRIPTION: {
+        REQUIRED: 'description is required',
+        EMPTY: 'description cannot be empty',
+        BASE: 'description must be a valid string',
+    },
+    TARGET_VALUE: {
+        REQUIRED: 'target value is required',
+        BASE: 'target value must be a number',
+        POSITIVE: 'target value must be a positive number',
+    },
+    ACHIEVED_VALUE: {
+        REQUIRED: 'achieved value is required',
+        BASE: 'achieved value must be a number',
+        POSITIVE: 'achieved value must be a positive number',
+    },
+    DATE_ACHIEVED: {
+        REQUIRED: 'date achieved is required',
+        BASE: 'date achieved must be a number',
+        INTEGER: 'date achieved must be an integer',
+    },
+    USER_ID: {
+        REQUIRED: 'user id is required',
+        EMPTY: 'user id cannot be empty',
+        BASE: 'user id must be a valid string',
+    },
+}
+
 export const errors = {
     HTTP: httpErrors,
-    DATABASE: DATABASE,
-    AUTHENTICATION: AUTHENTICATION,
-    USER: USER,
-    AUTHORIZATION: AUTHORIZATION,
-    ITEM: ITEM,
-    ACTIVITY_LOG: ACTIVITY_LOG,
-    BREATHING_ACTIVITY: BREATHING_ACTIVITY,
-    JOURNAL_ACTIVITY: JOURNAL_ACTIVITY,
+    DATABASE,
+    AUTHENTICATION,
+    USER,
+    AUTHORIZATION,
+    ITEM,
+    ACTIVITY_LOG,
+    BREATHING_ACTIVITY,
+    JOURNAL_ACTIVITY,
+    USER_MILESTONE,
 }
