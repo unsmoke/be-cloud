@@ -40,6 +40,14 @@ const USER = {
     NOT_FOUND: 'user not found',
     EMAIL_ALREADY_EXISTS: 'the email address is already in use',
     INSUFFICIENT_BALANCE: 'you do not have enough balance',
+    ID: {
+        IS_REQUIRED: 'please specify the user id',
+        MUST_BE_NUMBER: 'user id must be a valid number',
+        MUST_BE_VALID: 'user id must be a valid',
+        MUST_BE_POSITIVE: 'user id must be a positive number',
+        CANNOT_BE_EMPTY: 'user id cannot be left empty',
+        MUST_BE_STRING: 'user id must be a string',
+    },
 }
 
 const ITEM = {
@@ -107,14 +115,55 @@ const JOURNAL_ACTIVITY = {
     },
 }
 
+const USER_MILESTONE = {
+    TITLE: {
+        REQUIRED: 'title is required',
+        EMPTY: 'title cannot be empty',
+        BASE: 'title must be a valid string',
+    },
+    DESCRIPTION: {
+        REQUIRED: 'description is required',
+        EMPTY: 'description cannot be empty',
+        BASE: 'description must be a valid string',
+    },
+    TARGET_VALUE: {
+        REQUIRED: 'target value is required',
+        BASE: 'target value must be a number',
+        POSITIVE: 'target value must be a positive number',
+    },
+    ACHIEVED_VALUE: {
+        REQUIRED: 'achieved value is required',
+        BASE: 'achieved value must be a number',
+        POSITIVE: 'achieved value must be a positive number',
+    },
+    DATE_ACHIEVED: {
+        REQUIRED: 'date achieved is required',
+        BASE: 'date achieved must be a number',
+        INTEGER: 'date achieved must be an integer',
+    },
+    USER_ID: {
+        REQUIRED: 'user id is required',
+        EMPTY: 'user id cannot be empty',
+        BASE: 'user id must be a valid string',
+    },
+}
+
+const RELAPSE = {
+    USER_NOT_FOUND: 'user not found',
+    PLAN_NOT_FOUND: 'user plan not found',
+    RELAPSE_FAILED: 'failed to process relapse',
+}
+
 export const errors = {
     HTTP: httpErrors,
-    DATABASE: DATABASE,
-    AUTHENTICATION: AUTHENTICATION,
-    USER: USER,
-    AUTHORIZATION: AUTHORIZATION,
-    ITEM: ITEM,
-    ACTIVITY_LOG: ACTIVITY_LOG,
-    BREATHING_ACTIVITY: BREATHING_ACTIVITY,
-    JOURNAL_ACTIVITY: JOURNAL_ACTIVITY,
+    DATABASE,
+    AUTHENTICATION,
+    USER,
+    AUTHORIZATION,
+    ITEM,
+    ACTIVITY_LOG,
+    BREATHING_ACTIVITY,
+    JOURNAL_ACTIVITY,
+    USER_MILESTONE,
+    RELAPSE,
 }

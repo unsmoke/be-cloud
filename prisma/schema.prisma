@@ -20,7 +20,6 @@ model User {
   money_saved        Float           @default(0.0)
   cigarettes_avoided Int             @default(0)
   cigarettes_quota   Int[]
-  relapse_quota      Int             @default(0)
   province           String?
   city               String?
   is_premium         Boolean         @default(false)
@@ -32,6 +31,7 @@ model User {
   user_healths       UserHealth[]
   user_plans         UserPlan[]
   user_milestones    UserMilestone[]
+  user_relapses      UserRelapse[]
 }
 
 model Item {
@@ -146,4 +146,11 @@ model UserMilestone {
   created_at     DateTime @default(now())
   updated_at     DateTime @default(now()) @updatedAt
   user           User     @relation(fields: [user_id], references: [user_id])
+}
+
+model UserRelapse {
+  relapse_id   Int      @id @default(autoincrement())
+  user_id      String
+  date         DateTime
+  user         User     @relation(fields: [user_id], references: [user_id])
 }

@@ -126,7 +126,7 @@ const createUserHealth = async (data, user_id) => {
     )
 
     for (let i = 0; i < predictions.length; i++) {
-        const dayCount = i === 0 || i == 1 ? 30 : 180
+        const dayCount = i === 0 || i == 1 ? 30 : 90
         const cigarettesQuotaGeneration = await geneticAlgorithm(
             1000,
             100,
