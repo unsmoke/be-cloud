@@ -21,10 +21,9 @@ export const predict = async (inputData) => {
     }
 
     try {
-        // Reshape input data to match the expected shape [1, 22]
         const inputTensor = tf.tensor2d([inputData])
         const prediction = model.predict(inputTensor)
-        return prediction.dataSync() // or .arraySync() for array output
+        return prediction.dataSync()
     } catch (error) {
         console.error('Error during prediction:', error)
         throw new Error('Prediction error')
