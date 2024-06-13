@@ -158,6 +158,16 @@ const updateUserHealth = async (user_id, data) => {
 }
 
 const deleteUserHealth = async (user_id) => {
+    try {
+        await prismaClient.userPlan.deleteMany({
+            where: {
+                user_id: user_id,
+            },
+        })
+    } catch (error) {
+        throw new Error(error)
+    }
+
     return await prismaClient.userHealth.delete({
         where: {
             user_id: user_id,
