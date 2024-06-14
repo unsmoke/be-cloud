@@ -25,7 +25,7 @@ const registerUser = async (requestBody) => {
 
     const generatedUsername = fullName.split(' ')[0] + '#' + generateUsername()
 
-    return prismaClient.user.create({
+    const newUser = await prismaClient.user.create({
         data: { full_name: fullName, email, password: hashedPassword, username: generatedUsername },
         select: {
             user_id: true,
@@ -34,6 +34,19 @@ const registerUser = async (requestBody) => {
             username: true,
         },
     })
+
+    const items = await prismaClient.item.findMany()
+
+    for (const item of items) {
+        await prismaClient.shopItem.create({
+            data: {
+                user_id: newUser.user_id,
+                item_id: item.item_id,
+            },
+        })
+    }
+
+    return newUser
 }
 
 const loginUser = async (requestBody) => {

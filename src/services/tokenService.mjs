@@ -4,7 +4,7 @@ import { ResponseError } from '../utils/responseError.mjs'
 import { prismaClient } from '../app/db.mjs'
 
 const generateAccessToken = (userData) => {
-    return jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' })
+    return jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' })
 }
 
 const generateRefreshToken = (userData) => {

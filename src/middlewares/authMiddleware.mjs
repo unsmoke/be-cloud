@@ -10,7 +10,7 @@ const authMiddleware = (req, res, next) => {
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res
-            .status(errors.HTTP.CODE.INTERNAL_SERVER_ERROR)
+            .status(errors.HTTP.CODE.UNAUTHORIZED)
             .send(
                 responseError(
                     errors.HTTP.CODE.UNAUTHORIZED,
@@ -28,7 +28,7 @@ const authMiddleware = (req, res, next) => {
         next()
     } catch (e) {
         return res
-            .status(errors.HTTP.CODE.INTERNAL_SERVER_ERROR)
+            .status(errors.HTTP.CODE.UNAUTHORIZED)
             .send(
                 responseError(
                     errors.HTTP.CODE.UNAUTHORIZED,
