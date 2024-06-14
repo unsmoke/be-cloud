@@ -2,7 +2,7 @@ import seedUsers from './userSeeder.mjs'
 import seedItems from './itemSeeder.mjs'
 import seedUserItems from './userItemSeeder.mjs'
 import seedShopItems from './shopItemSeeder.mjs'
-import seedBreathingActivities from './breathingActivitySeeder.mjs'
+// import seedBreathingActivities from './breathingActivitySeeder.mjs'
 import seedJournalActivities from './journalActivitySeeder.mjs'
 import seedUserHealths from './userHealthSeeder.mjs'
 import seedUserPlans from './userPlanSeeder.mjs'
@@ -15,7 +15,7 @@ const seed = async () => {
     await seedItems()
     await seedUserItems()
     await seedShopItems()
-    await seedBreathingActivities()
+    // await seedBreathingActivities()
     await seedJournalActivities()
     await seedUserHealths()
     await seedUserPlans()

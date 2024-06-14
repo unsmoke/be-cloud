@@ -13,19 +13,19 @@ shopItemRouter.get(
     validateShopItemParams,
     shopItemController.getShopItemDetail
 )
-shopItemRouter.post('/shop', authMiddleware, validateShopItem, shopItemController.createShopItem)
-shopItemRouter.put(
-    '/shop/:user_id/:item_id',
-    authMiddleware,
-    validateShopItemParams,
-    validateShopItem,
-    shopItemController.updateShopItem
-)
-shopItemRouter.delete(
-    '/shop/:user_id/:item_id',
-    authMiddleware,
-    validateShopItemParams,
-    shopItemController.deleteShopItem
-)
+// shopItemRouter.post('/shop', authMiddleware, validateShopItem, shopItemController.createShopItem)
+// shopItemRouter.put(
+//     '/shop/:user_id/:item_id',
+//     authMiddleware,
+//     validateShopItemParams,
+//     validateShopItem,
+//     shopItemController.updateShopItem
+// )
+// shopItemRouter.delete(
+//     '/shop/:user_id/:item_id',
+//     authMiddleware,
+//     validateShopItemParams,
+//     shopItemController.deleteShopItem
+// )
 
 export default shopItemRouter

@@ -40,7 +40,6 @@ const fetchUserInventory = async (user_id) => {
 }
 
 const createUserItem = async (user_id, item_id) => {
-    // Fetch user details including balance_coin
     const user = await prismaClient.user.findUnique({
         where: { user_id: user_id },
         select: { balance_coin: true },
@@ -50,7 +49,6 @@ const createUserItem = async (user_id, item_id) => {
         throw new Error('User not found')
     }
 
-    // Fetch item price from the item table
     const item = await prismaClient.item.findUnique({
         where: { item_id: item_id },
         select: { price: true },
@@ -60,7 +58,6 @@ const createUserItem = async (user_id, item_id) => {
         throw new Error('Item not found')
     }
 
-    // Check if the item exists in the user's shop
     const itemExists = await prismaClient.shopItem.findUnique({
         where: {
             user_id_item_id: {
@@ -80,7 +77,6 @@ const createUserItem = async (user_id, item_id) => {
         throw new Error('Insufficient balance')
     }
 
-    // Decrement the user's balance_coin
     await prismaClient.user.update({
         where: { user_id: user_id },
         data: {
@@ -90,7 +86,15 @@ const createUserItem = async (user_id, item_id) => {
         },
     })
 
-    // Create the user item
+    await prismaClient.shopItem.delete({
+        where: {
+            user_id_item_id: {
+                user_id: user_id,
+                item_id: item_id,
+            },
+        },
+    })
+
     return await prismaClient.userItem.create({
         data: {
             user_id,

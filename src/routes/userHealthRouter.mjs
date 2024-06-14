@@ -3,7 +3,7 @@ import userHealthController from '../controllers/userHealthController.mjs'
 import authMiddleware from '../middlewares/authMiddleware.mjs'
 import {
     validateUserHealth,
-    validateUserHealthParams,
+    // validateUserHealthParams,
 } from '../validations/userHealthValidations.mjs'
 
 const userHealthRouter = express.Router()
@@ -16,18 +16,18 @@ userHealthRouter.post(
     validateUserHealth,
     userHealthController.createUserHealth
 )
-userHealthRouter.put(
-    '/health/:user_id',
-    authMiddleware,
-    validateUserHealthParams,
-    validateUserHealth,
-    userHealthController.updateUserHealth
-)
-userHealthRouter.delete(
-    '/health/:user_id',
-    authMiddleware,
-    validateUserHealthParams,
-    userHealthController.deleteUserHealth
-)
+// userHealthRouter.put(
+//     '/health/:user_id',
+//     authMiddleware,
+//     validateUserHealthParams,
+//     validateUserHealth,
+//     userHealthController.updateUserHealth
+// )
+// userHealthRouter.delete(
+//     '/health/:user_id',
+//     authMiddleware,
+//     validateUserHealthParams,
+//     userHealthController.deleteUserHealth
+// )
 
 export default userHealthRouter

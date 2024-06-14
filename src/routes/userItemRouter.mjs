@@ -19,18 +19,18 @@ userItemRouter.post(
     validateUserItem,
     userItemController.createUserItem
 )
-userItemRouter.put(
-    '/inventory/:user_id/:item_id',
-    authMiddleware,
-    validateUserItemParams,
-    validateUserItem,
-    userItemController.updateUserItem
-)
-userItemRouter.delete(
-    '/inventory/:user_id/:item_id',
-    authMiddleware,
-    validateUserItemParams,
-    userItemController.deleteUserItem
-)
+// userItemRouter.put(
+//     '/inventory/:user_id/:item_id',
+//     authMiddleware,
+//     validateUserItemParams,
+//     validateUserItem,
+//     userItemController.updateUserItem
+// )
+// userItemRouter.delete(
+//     '/inventory/:user_id/:item_id',
+//     authMiddleware,
+//     validateUserItemParams,
+//     userItemController.deleteUserItem
+// )
 
 export default userItemRouter

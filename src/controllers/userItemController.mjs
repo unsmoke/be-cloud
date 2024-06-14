@@ -68,11 +68,11 @@ const updateUserItem = async (req, res, next) => {
         const existingUserItem = await userItemService.fetchUserItemDetail(user_id, item_id)
         if (!existingUserItem) {
             return res
-                .status(failure.HTTP.CODE.NOT_FOUND)
+                .status(errors.HTTP.CODE.NOT_FOUND)
                 .send(
                     responseError(
-                        failure.HTTP.CODE.NOT_FOUND,
-                        failure.HTTP.STATUS.NOT_FOUND,
+                        errors.HTTP.CODE.NOT_FOUND,
+                        errors.HTTP.STATUS.NOT_FOUND,
                         'User item not found'
                     )
                 )
