@@ -34,6 +34,7 @@ const fetchShopItemsByUser = async (user_id) => {
         description: item.item.description,
         price: item.item.price,
         img_url: item.item.img_url,
+        lung_url: item.item.lung_url,
         created_at: item.item.created_at,
         updated_at: item.item.updated_at,
     }))

@@ -40,6 +40,7 @@ model Item {
   description String
   price       Float
   img_url     String
+  lung_url    String
   created_at  DateTime   @default(now())
   updated_at  DateTime   @default(now()) @updatedAt
   user_items  UserItem[]
@@ -149,8 +150,8 @@ model UserMilestone {
 }
 
 model UserRelapse {
-  relapse_id   Int      @id @default(autoincrement())
-  user_id      String
-  date         DateTime
-  user         User     @relation(fields: [user_id], references: [user_id])
+  relapse_id Int      @id @default(autoincrement())
+  user_id    String
+  date       DateTime
+  user       User     @relation(fields: [user_id], references: [user_id])
 }
