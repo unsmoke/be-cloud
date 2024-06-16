@@ -83,9 +83,29 @@ const loginUser = async (requestBody) => {
 
 const fetchUser = async (user_id) => {
     try {
+        // Fetch the user without the password
         const user = await prismaClient.user.findUnique({
             where: {
                 user_id: user_id,
+            },
+            select: {
+                user_id: true,
+                full_name: true,
+                username: true,
+                email: true,
+                time_zone: true,
+                balance_coin: true,
+                exp: true,
+                streak_count: true,
+                money_saved: true,
+                cigarettes_avoided: true,
+                cigarettes_quota: true,
+                province: true,
+                city: true,
+                is_premium: true,
+                profile_url: true,
+                created_at: true,
+                updated_at: true,
             },
         })
 
@@ -93,11 +113,32 @@ const fetchUser = async (user_id) => {
             throw new Error('User not found')
         }
 
+        // Fetch all users in the same province and order by exp
         const allUsers = await prismaClient.user.findMany({
             where: { province: user.province },
             orderBy: { exp: 'desc' },
+            select: {
+                user_id: true,
+                full_name: true,
+                username: true,
+                email: true,
+                time_zone: true,
+                balance_coin: true,
+                exp: true,
+                streak_count: true,
+                money_saved: true,
+                cigarettes_avoided: true,
+                cigarettes_quota: true,
+                province: true,
+                city: true,
+                is_premium: true,
+                profile_url: true,
+                created_at: true,
+                updated_at: true,
+            },
         })
 
+        // Calculate the rank of the user
         const userWithRank = allUsers
             .map((u, index) => ({
                 ...u,
@@ -116,6 +157,11 @@ const modifyUserProfile = async (user_id, username, file) => {
     const gcsFileName = `user-profiles/${user_id}-${uuidv4()}.${fileExtension}`
     const blob = bucket.file(gcsFileName)
 
+    // Delete existing files for the user
+    const [files] = await bucket.getFiles({ prefix: `user-profiles/${user_id}-` })
+    await Promise.all(files.map((file) => file.delete()))
+
+    // Upload the new file
     const blobStream = blob.createWriteStream({
         resumable: false,
         contentType: file.mimetype,
