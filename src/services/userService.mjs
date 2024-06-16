@@ -186,6 +186,14 @@ const modifyUserProfile = async (user_id, username, file) => {
             username: username,
             profile_url: publicUrl,
         },
+        select: {
+            user_id: true,
+            full_name: true,
+            username: true,
+            profile_url: true,
+            created_at: true,
+            updated_at: true,
+        },
     })
 
     return updatedUser
