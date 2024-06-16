@@ -17,7 +17,7 @@ const fetchBreathingActivityById = async (id) => {
         throw new ResponseError(
             errors.HTTP.CODE.NOT_FOUND,
             errors.HTTP.STATUS.NOT_FOUND,
-            errors.GENERAL.NOT_FOUND
+            errors.BREATHING_ACTIVITY.NOT_FOUND
         )
     }
     return breathingActivity
