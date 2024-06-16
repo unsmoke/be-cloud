@@ -1,66 +1,67 @@
 name: Build and Deploy to Cloud Run
 
 on:
-  push:
-    branches:
-      - main
-      - dev
+    push:
+        branches:
+            - main
+            - dev
 
 env:
-  PROJECT_ID: bangkit-capstone-424110 # TODO: update Google Cloud project id
-  GAR_LOCATION: asia-southeast2 # TODO: update Artifact Registry location
-  GAR_REPOSITORY_NAME: be-unsmoke # TODO: update Artifact Registry Repository name
-  SERVICE: be-unsmoke # TODO: update Cloud Run service name
-  REGION: asia-southeast2 # TODO: update Cloud Run service region
+    PROJECT_ID: bangkit-capstone-424110 # TODO: update Google Cloud project id
+    GAR_LOCATION: asia-southeast2 # TODO: update Artifact Registry location
+    GAR_REPOSITORY_NAME: be-unsmoke # TODO: update Artifact Registry Repository name
+    SERVICE: be-unsmoke # TODO: update Cloud Run service name
+    REGION: asia-southeast2 # TODO: update Cloud Run service region
 
 jobs:
-  deploy:
-    permissions:
-      contents: "read"
-      id-token: "write"
+    deploy:
+        permissions:
+            contents: 'read'
+            id-token: 'write'
 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
 
-      - name: Google Auth
-        id: auth
-        uses: "google-github-actions/auth@v2"
-        with:
-          credentials_json: "${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}"
+            - name: Google Auth
+              id: auth
+              uses: 'google-github-actions/auth@v2'
+              with:
+                  credentials_json: '${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}'
 
-      - name: Configure Docker to use gcloud
-        run: |-
-          gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev --quiet
+            - name: Configure Docker to use gcloud
+              run: |-
+                  gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev --quiet
 
-      - name: Set Tag and Service Name
-        id: set-variables
-        run: |
-          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
-            echo "tag=dev" >> $GITHUB_ENV
-            echo "service=${{ env.SERVICE }}-dev" >> $GITHUB_ENV
-          else
-            echo "tag=${{ github.sha }}" >> $GITHUB_ENV
-            echo "service=${{ env.SERVICE }}-prod" >> $GITHUB_ENV
-          fi
+            - name: Set Tag and Service Name
+              id: set-variables
+              run: |
+                  if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+                    echo "tag=dev" >> $GITHUB_ENV
+                    echo "service=${{ env.SERVICE }}-dev" >> $GITHUB_ENV
+                  else
+                    echo "tag=${{ github.sha }}" >> $GITHUB_ENV
+                    echo "service=${{ env.SERVICE }}-prod" >> $GITHUB_ENV
+                  fi
 
+            - name: Build and Push Container
+              run: |-
+                  docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}" ./
+                  docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}"
 
-      - name: Build and Push Container
-        run: |-     
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}"
+            - name: Deploy to Cloud Run
+              id: deploy
+              uses: google-github-actions/deploy-cloudrun@v2
+              with:
+                  service: ${{ env.service }}
+                  region: ${{ env.REGION }}
+                  image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}
+                  env_vars: |
+                      DATABASE_URL=${{ secrets.DATABASE_URL }}
+                      JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
+                      JWT_SECRET=${{ secrets.JWT_SECRET }}
+                      MODEL_URL=${{ secrets.MODEL_URL }}
 
-      - name: Deploy to Cloud Run
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.service }}
-          region: ${{ env.REGION }}
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}
-          env_vars: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            GOOGLE_CLOUD_STORAGE_KEY=${{ secrets.GOOGLE_CLOUD_STORAGE_KEY }}
-
-      - name: Show Output
-        run: echo ${{ steps.deploy.outputs.url }}
+            - name: Show Output
+              run: echo ${{ steps.deploy.outputs.url }}
