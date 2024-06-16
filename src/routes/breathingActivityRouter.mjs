@@ -4,11 +4,11 @@ import authMiddleware from '../middlewares/authMiddleware.mjs'
 
 const breathingActivityRouter = express.Router()
 
-breathingActivityRouter.get(
-    '/breathing-activities',
-    authMiddleware,
-    breathingActivityController.getAllBreathingActivities
-)
+// breathingActivityRouter.get(
+//     '/breathing-activities',
+//     authMiddleware,
+//     breathingActivityController.getAllBreathingActivities
+// )
 breathingActivityRouter.get(
     '/breathing-activities/:id',
     authMiddleware,
@@ -19,15 +19,15 @@ breathingActivityRouter.post(
     authMiddleware,
     breathingActivityController.createBreathingActivity
 )
-breathingActivityRouter.put(
-    '/breathing-activities/:id',
-    authMiddleware,
-    breathingActivityController.updateBreathingActivity
-)
-breathingActivityRouter.delete(
-    '/breathing-activities/:id',
-    authMiddleware,
-    breathingActivityController.deleteBreathingActivity
-)
+// breathingActivityRouter.put(
+//     '/breathing-activities/:id',
+//     authMiddleware,
+//     breathingActivityController.updateBreathingActivity
+// )
+// breathingActivityRouter.delete(
+//     '/breathing-activities/:id',
+//     authMiddleware,
+//     breathingActivityController.deleteBreathingActivity
+// )
 
 export default breathingActivityRouter
