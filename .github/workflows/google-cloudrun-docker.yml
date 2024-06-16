@@ -58,7 +58,9 @@ jobs:
           service: ${{ env.service }}
           region: ${{ env.REGION }}
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY_NAME }}/${{ env.SERVICE }}:${{ env.tag }}
-          env_vars: DATABASE_URL=${{ secrets.DATABASE_URL }}
+          env_vars: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            GOOGLE_CLOUD_STORAGE_KEY=${{ secrets.GOOGLE_CLOUD_STORAGE_KEY }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
