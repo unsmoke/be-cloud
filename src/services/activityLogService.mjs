@@ -6,6 +6,7 @@ import {
     activityLogIdSchema,
     getActivityLogSchema,
 } from '../validations/activityLogValidations.mjs'
+import { logger } from '../app/logging.mjs'
 
 const fetchAllActivityLogs = async (req) => {
     const { page, size } = validate(getActivityLogSchema, req.query)
@@ -117,8 +118,8 @@ const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id
     }
 
     const dateObj = new Date(date * 1000)
-    const startOfDayEpoch = Math.floor(dateObj.setHours(0, 0, 0, 0) / 1000)
-    const endOfDayEpoch = Math.floor(dateObj.setHours(23, 59, 59, 999) / 1000)
+    const startOfDayEpoch = new Date(dateObj.setHours(0, 0, 0, 0))
+    const endOfDayEpoch = new Date(dateObj.setHours(23, 59, 59, 999))
 
     const data = {
         user_id,
@@ -130,51 +131,66 @@ const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id
     }
 
     return prismaClient.$transaction(async (prisma) => {
-        const activityLog = await prisma.activityLog.upsert({
+        const activityLog = await prisma.activityLog.findFirst({
             where: {
-                AND: [
-                    { user_id },
-                    {
-                        date: {
-                            gte: startOfDayEpoch,
-                            lte: endOfDayEpoch,
-                        },
-                    },
-                ],
+                user_id,
+                date: {
+                    gte: startOfDayEpoch,
+                    lte: endOfDayEpoch,
+                },
             },
-            update: data,
-            create: data,
+            select: {
+                activity_log_id: true,
+            },
         })
 
-        const user = await prisma.user.findUnique({ where: { user_id } })
-        const userHealth = await prisma.userHealth.findUnique({ where: { user_id } })
+        logger.info(activityLog)
 
-        let updateData = { exp: user.exp }
+        // await prisma.activityLog.upsert({
+        //     where: {
+        //         AND: [
+        //             { user_id, activity_log_id: activityLog?.activity_log_id },
+        //             {
+        //                 date: {
+        //                     gte: startOfDayEpoch,
+        //                     lte: endOfDayEpoch,
+        //                 },
+        //             },
+        //         ],
+        //     },
+        //     update: data,
+        //     create: data,
+        // })
 
-        if (breathing_id && journal_id) {
-            const cigarettesPerDay = userHealth.cigarettes_per_day
-            const cigarettesAvoidedToday = cigarettesPerDay / 24 // Assuming even distribution of smoking throughout the day
+        // const user = await prisma.user.findUnique({ where: { user_id } })
+        // const userHealth = await prisma.userHealth.findUnique({ where: { user_id } })
 
-            updateData = {
-                ...updateData,
-                streak_count: user.streak_count + 1,
-                money_saved:
-                    user.money_saved +
-                    (userHealth.pack_price / userHealth.cigarettes_per_pack) *
-                        cigarettesAvoidedToday,
-                cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
-                cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
-            }
-        } else if (breathing_id || journal_id) {
-            updateData.exp += 10 // Example value
-        }
+        // let updateData = { exp: user.exp }
 
-        await prisma.user.update({
-            where: { user_id },
-            data: updateData,
-        })
+        // if (breathing_id && journal_id) {
+        //     const cigarettesPerDay = userHealth.cigarettes_per_day
+        //     const cigarettesAvoidedToday = cigarettesPerDay / 24 // Assuming even distribution of smoking throughout the day
 
-        return activityLog
+        //     updateData = {
+        //         ...updateData,
+        //         streak_count: user.streak_count + 1,
+        //         money_saved:
+        //             user.money_saved +
+        //             (userHealth.pack_price / userHealth.cigarettes_per_pack) *
+        //                 cigarettesAvoidedToday,
+        //         cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
+        //         cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
+        //     }
+        // } else if (breathing_id || journal_id) {
+        //     updateData.exp += 10 // Example value
+        // }
+
+        // await prisma.user.update({
+        //     where: { user_id },
+        //     data: updateData,
+        // })
+
+        // return activityLog
     })
 }
 

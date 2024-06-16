@@ -4,10 +4,7 @@ import { errors } from '../utils/messageError.mjs'
 import { validate } from '../validations/validation.mjs'
 import { createBreathingActivitySchema } from '../validations/breathingActivityValidations.mjs'
 import activityLogService from './activityLogService.mjs'
-
-const fetchAllBreathingActivities = async () => {
-    return prismaClient.breathingActivity.findMany()
-}
+import { logger } from '../app/logging.mjs'
 
 const fetchBreathingActivityById = async (id) => {
     const breathingActivity = await prismaClient.breathingActivity.findUnique({
@@ -27,12 +24,22 @@ const createBreathingActivity = async (req) => {
     const { user_id, duration, reward, date } = validate(createBreathingActivitySchema, req.body)
 
     return prismaClient.$transaction(async (prisma) => {
+        const user = await prisma.user.findUnique({
+            where: { user_id },
+        })
+
+        if (!user) {
+            throw new ResponseError(
+                errors.HTTP.CODE.NOT_FOUND,
+                errors.HTTP.STATUS.NOT_FOUND,
+                errors.USER.NOT_FOUND
+            )
+        }
+
         const breathingActivity = await prisma.breathingActivity.create({
             data: {
-                user_id,
                 duration,
                 reward,
-                date,
             },
         })
 
@@ -46,23 +53,7 @@ const createBreathingActivity = async (req) => {
     })
 }
 
-const updateBreathingActivity = async (id, data) => {
-    const breathingActivity = prismaClient.breathingActivity.update({
-        where: { breathing_id: parseInt(id) },
-        data,
-    })
-
-    return breathingActivity
-}
-
-const deleteBreathingActivity = async (id) => {
-    await prismaClient.breathingActivity.delete({ where: { breathing_id: parseInt(id) } })
-}
-
 export default {
-    fetchAllBreathingActivities,
     fetchBreathingActivityById,
     createBreathingActivity,
-    updateBreathingActivity,
-    deleteBreathingActivity,
 }

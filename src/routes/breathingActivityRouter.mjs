@@ -14,20 +14,5 @@ breathingActivityRouter.post(
     authMiddleware,
     breathingActivityController.createBreathingActivity
 )
-// breathingActivityRouter.get(
-//     '/breathing-activities',
-//     authMiddleware,
-//     breathingActivityController.getAllBreathingActivities
-// )
-// breathingActivityRouter.put(
-//     '/breathing-activities/:id',
-//     authMiddleware,
-//     breathingActivityController.updateBreathingActivity
-// )
-// breathingActivityRouter.delete(
-//     '/breathing-activities/:id',
-//     authMiddleware,
-//     breathingActivityController.deleteBreathingActivity
-// )
 
 export default breathingActivityRouter

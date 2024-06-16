@@ -26,20 +26,9 @@ const getActivityLogById = async (req, res, next) => {
 
 const createActivityLog = async (req, res, next) => {
     try {
-        const result = await activityLogService.createActivityLog(req.body)
+        const result = await activityLogService.createOrUpdateActivityLog(req.body)
         res.status(success.HTTP.CODE.CREATED).send(
             responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, result)
-        )
-    } catch (e) {
-        next(e)
-    }
-}
-
-const updateActivityLog = async (req, res, next) => {
-    try {
-        const result = await activityLogService.updateActivityLog(req.params.id, req.body)
-        res.status(success.HTTP.CODE.OK).send(
-            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
     } catch (e) {
         next(e)
@@ -59,6 +48,5 @@ export default {
     getAllActivityLogs,
     getActivityLogById,
     createActivityLog,
-    updateActivityLog,
     deleteActivityLog,
 }
