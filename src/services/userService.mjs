@@ -5,6 +5,8 @@ import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
 import tokenService from './tokenService.mjs'
 import { generateUsername } from '../utils/usernameGenerator.mjs'
+import { v4 as uuidv4 } from 'uuid'
+import { bucket } from '../configs/gcsConfig.mjs'
 
 dotenv.config()
 
@@ -79,4 +81,68 @@ const loginUser = async (requestBody) => {
     return { user_id: user.user_id, accessToken, refreshToken }
 }
 
-export default { registerUser, loginUser }
+const fetchUser = async (user_id) => {
+    try {
+        const user = await prismaClient.user.findUnique({
+            where: {
+                user_id: user_id,
+            },
+        })
+
+        if (!user) {
+            throw new Error('User not found')
+        }
+
+        const allUsers = await prismaClient.user.findMany({
+            where: { province: user.province },
+            orderBy: { exp: 'desc' },
+        })
+
+        const userWithRank = allUsers
+            .map((u, index) => ({
+                ...u,
+                rank: index + 1,
+            }))
+            .find((u) => u.user_id === user_id)
+
+        return userWithRank
+    } catch (error) {
+        throw new Error('Error fetching user with rank')
+    }
+}
+
+const modifyUserProfile = async (user_id, username, file) => {
+    const fileExtension = file.originalname.split('.').pop()
+    const gcsFileName = `user-profiles/${user_id}-${uuidv4()}.${fileExtension}`
+    const blob = bucket.file(gcsFileName)
+
+    const blobStream = blob.createWriteStream({
+        resumable: false,
+        contentType: file.mimetype,
+    })
+
+    const publicUrl = await new Promise((resolve, reject) => {
+        blobStream.on('finish', () => {
+            const url = `https://storage.googleapis.com/${bucket.name}/${gcsFileName}`
+            resolve(url)
+        })
+
+        blobStream.on('error', (err) => {
+            reject(err)
+        })
+
+        blobStream.end(file.buffer)
+    })
+
+    const updatedUser = await prismaClient.user.update({
+        where: { user_id: user_id },
+        data: {
+            username: username,
+            profile_url: publicUrl,
+        },
+    })
+
+    return updatedUser
+}
+
+export default { registerUser, loginUser, fetchUser, modifyUserProfile }

@@ -23,6 +23,7 @@ model User {
   province           String?
   city               String?
   is_premium         Boolean         @default(false)
+  profile_url        String?
   created_at         DateTime        @default(now())
   updated_at         DateTime        @default(now()) @updatedAt
   user_items         UserItem[]
