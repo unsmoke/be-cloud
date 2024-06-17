@@ -135,7 +135,22 @@ const createOrUpdateActivityLog = async ({
 
         let updateData = { exp: user.exp }
 
-        if (userActivityLog.breathing_id && userActivityLog.journal_id) {
+        const newActivityLog = await prisma.activityLog.findFirst({
+            where: {
+                user_id,
+                date: {
+                    gte: startOfDay,
+                    lte: endOfDay,
+                },
+            },
+            select: {
+                activity_log_id: true,
+                breathing_id: true,
+                journal_id: true,
+            },
+        })
+
+        if (newActivityLog.breathing_id && newActivityLog.journal_id) {
             const cigarettesPerDay = userHealth.cigarettes_per_day
             const cigarettesAvoidedToday = cigarettesPerDay / 24
 
@@ -149,7 +164,7 @@ const createOrUpdateActivityLog = async ({
                 cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
                 cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
             }
-        } else if (userActivityLog.breathing_id || userActivityLog.journal_id) {
+        } else if (newActivityLog.breathing_id || newActivityLog.journal_id) {
             updateData.exp += reward
         }
 

@@ -4,6 +4,7 @@ import { errors } from '../utils/messageError.mjs'
 import { validate } from '../validations/validation.mjs'
 import { createBreathingActivitySchema } from '../validations/breathingActivityValidations.mjs'
 import activityLogService from './activityLogService.mjs'
+import { logger } from '../app/logging.mjs'
 
 const fetchBreathingActivityById = async (id) => {
     const breathingActivity = await prismaClient.breathingActivity.findUnique({
