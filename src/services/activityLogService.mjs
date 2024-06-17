@@ -2,15 +2,12 @@ import { prismaClient } from '../app/db.mjs'
 import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
 import { validate } from '../validations/validation.mjs'
-import {
-    activityLogIdSchema,
-    getActivityLogSchema,
-} from '../validations/activityLogValidations.mjs'
+import { activityLogIdSchema } from '../validations/activityLogValidations.mjs'
 
-const fetchActivityLogByUsedId = async (req) => {
-    const { id } = validate(activityLogIdSchema, req.params)
+const fetchActivityLogByUserId = async (req) => {
+    const { userId } = validate(activityLogIdSchema, req.params)
 
-    if (!parseInt(id)) {
+    if (!parseInt(userId)) {
         throw new ResponseError(
             errors.HTTP.CODE.BAD_REQUEST,
             errors.HTTP.STATUS.BAD_REQUEST,
@@ -19,9 +16,9 @@ const fetchActivityLogByUsedId = async (req) => {
     }
 
     return prismaClient.$transaction(async (prisma) => {
-        const result = await prisma.activityLog.findUnique({
+        const result = await prisma.activityLog.findMany({
             where: {
-                activity_log_id: parseInt(id),
+                user_id: parseInt(userId),
             },
             select: {
                 activity_log_id: true,
@@ -169,6 +166,6 @@ const createOrUpdateActivityLog = async ({
 }
 
 export default {
-    fetchActivityLogByUsedId,
+    fetchActivityLogByUserId,
     createOrUpdateActivityLog,
 }
