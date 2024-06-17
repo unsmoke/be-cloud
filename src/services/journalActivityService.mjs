@@ -1,7 +1,7 @@
 import { prismaClient } from '../app/db.mjs'
 import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
-import { validate } from 'uuid'
+import { validate } from '../validations/validation.mjs'
 import {
     createJournalActivitySchema,
     activityLogIdSchema,
