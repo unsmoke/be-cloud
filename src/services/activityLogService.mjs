@@ -6,40 +6,8 @@ import {
     activityLogIdSchema,
     getActivityLogSchema,
 } from '../validations/activityLogValidations.mjs'
-import { logger } from '../app/logging.mjs'
 
-const fetchAllActivityLogs = async (req) => {
-    const { page, size } = validate(getActivityLogSchema, req.query)
-    const skip = (page - 1) * size
-
-    return prismaClient.$transaction(async (prisma) => {
-        const activityLogs = await prisma.activityLog.findMany({
-            select: {
-                activity_log_id: true,
-                breathing_id: true,
-                journal_id: true,
-                date: true,
-                created_at: true,
-            },
-            skip,
-            take: size,
-        })
-
-        const totalItem = await prisma.activityLog.count()
-
-        return {
-            data: activityLogs,
-            pagination: {
-                page,
-                skip,
-                total_item: totalItem,
-                total_page: Math.ceil(totalItem / size),
-            },
-        }
-    })
-}
-
-const fetchActivityLogById = async (req) => {
+const fetchActivityLogByUsedId = async (req) => {
     const { id } = validate(activityLogIdSchema, req.params)
 
     if (!parseInt(id)) {
@@ -84,7 +52,13 @@ const fetchActivityLogById = async (req) => {
     })
 }
 
-const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id = 0, date }) => {
+const createOrUpdateActivityLog = async ({
+    user_id,
+    breathing_id = 0,
+    journal_id = 0,
+    reward = 0,
+    date,
+}) => {
     if (breathing_id === 0 && journal_id === 0) {
         throw new ResponseError(
             errors.HTTP.CODE.BAD_REQUEST,
@@ -118,113 +92,83 @@ const createOrUpdateActivityLog = async ({ user_id, breathing_id = 0, journal_id
     }
 
     const dateObj = new Date(date * 1000)
-    const startOfDayEpoch = new Date(dateObj.setHours(0, 0, 0, 0))
-    const endOfDayEpoch = new Date(dateObj.setHours(23, 59, 59, 999))
+    const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0))
+    const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999))
 
     const data = {
         user_id,
-        date,
+        date: dateObj,
         ...(breathing_id && { breathing_id }),
         ...(journal_id && { journal_id }),
-        created_at: Math.floor(Date.now() / 1000),
-        updated_at: Math.floor(Date.now() / 1000),
+        created_at: new Date(),
+        updated_at: new Date(),
     }
 
     return prismaClient.$transaction(async (prisma) => {
-        const activityLog = await prisma.activityLog.findFirst({
+        const userActivityLog = await prisma.activityLog.findFirst({
             where: {
                 user_id,
                 date: {
-                    gte: startOfDayEpoch,
-                    lte: endOfDayEpoch,
+                    gte: startOfDay,
+                    lte: endOfDay,
                 },
             },
             select: {
                 activity_log_id: true,
+                breathing_id: true,
+                journal_id: true,
             },
         })
 
-        logger.info(activityLog)
-
-        // await prisma.activityLog.upsert({
-        //     where: {
-        //         AND: [
-        //             { user_id, activity_log_id: activityLog?.activity_log_id },
-        //             {
-        //                 date: {
-        //                     gte: startOfDayEpoch,
-        //                     lte: endOfDayEpoch,
-        //                 },
-        //             },
-        //         ],
-        //     },
-        //     update: data,
-        //     create: data,
-        // })
-
-        // const user = await prisma.user.findUnique({ where: { user_id } })
-        // const userHealth = await prisma.userHealth.findUnique({ where: { user_id } })
-
-        // let updateData = { exp: user.exp }
-
-        // if (breathing_id && journal_id) {
-        //     const cigarettesPerDay = userHealth.cigarettes_per_day
-        //     const cigarettesAvoidedToday = cigarettesPerDay / 24 // Assuming even distribution of smoking throughout the day
-
-        //     updateData = {
-        //         ...updateData,
-        //         streak_count: user.streak_count + 1,
-        //         money_saved:
-        //             user.money_saved +
-        //             (userHealth.pack_price / userHealth.cigarettes_per_pack) *
-        //                 cigarettesAvoidedToday,
-        //         cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
-        //         cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
-        //     }
-        // } else if (breathing_id || journal_id) {
-        //     updateData.exp += 10 // Example value
-        // }
-
-        // await prisma.user.update({
-        //     where: { user_id },
-        //     data: updateData,
-        // })
-
-        // return activityLog
-    })
-}
-
-const deleteActivityLog = async (req) => {
-    const { id } = validate(activityLogIdSchema, req.params)
-
-    if (!parseInt(id)) {
-        throw new ResponseError(
-            errors.HTTP.CODE.BAD_REQUEST,
-            errors.HTTP.STATUS.BAD_REQUEST,
-            errors.ACTIVITY_LOG.ID.MUST_BE_VALID
-        )
-    }
-
-    return prismaClient.$transaction(async (prisma) => {
-        const activityLog = await prisma.activityLog.findUnique({
-            where: { activity_log_id: parseInt(id) },
-        })
-
-        if (!activityLog) {
-            throw new ResponseError(
-                errors.HTTP.CODE.NOT_FOUND,
-                errors.HTTP.STATUS.NOT_FOUND,
-                errors.ACTIVITY_LOG.ID.NOT_FOUND
-            )
+        if (!userActivityLog) {
+            await prisma.activityLog.create({
+                data: {
+                    ...data,
+                },
+            })
+        } else {
+            await prisma.activityLog.update({
+                where: { activity_log_id: userActivityLog.activity_log_id },
+                data,
+            })
         }
 
-        return prisma.activityLog.delete({ where: { activity_log_id: parseInt(id) } })
+        const user = await prisma.user.findUnique({ where: { user_id } })
+        const userHealth = await prisma.userHealth.findUnique({ where: { user_id } })
+
+        let updateData = { exp: user.exp }
+
+        if (userActivityLog.breathing_id && userActivityLog.journal_id) {
+            const cigarettesPerDay = userHealth.cigarettes_per_day
+            const cigarettesAvoidedToday = cigarettesPerDay / 24
+
+            updateData = {
+                ...updateData,
+                streak_count: user.streak_count + 1,
+                money_saved:
+                    user.money_saved +
+                    (userHealth.pack_price / userHealth.cigarettes_per_pack) *
+                        cigarettesAvoidedToday,
+                cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
+                cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
+            }
+        } else if (userActivityLog.breathing_id || userActivityLog.journal_id) {
+            updateData.exp += reward
+        }
+
+        return prisma.user.update({
+            where: { user_id },
+            data: updateData,
+            select: {
+                username: true,
+                exp: true,
+                streak_count: true,
+            },
+        })
     })
 }
 
 export default {
-    fetchAllActivityLogs,
-    fetchActivityLogById,
+    fetchActivityLogByUsedId,
     createOrUpdateActivityLog,
-    deleteActivityLog,
 }

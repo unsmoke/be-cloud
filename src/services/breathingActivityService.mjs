@@ -4,7 +4,6 @@ import { errors } from '../utils/messageError.mjs'
 import { validate } from '../validations/validation.mjs'
 import { createBreathingActivitySchema } from '../validations/breathingActivityValidations.mjs'
 import activityLogService from './activityLogService.mjs'
-import { logger } from '../app/logging.mjs'
 
 const fetchBreathingActivityById = async (id) => {
     const breathingActivity = await prismaClient.breathingActivity.findUnique({
@@ -23,33 +22,30 @@ const fetchBreathingActivityById = async (id) => {
 const createBreathingActivity = async (req) => {
     const { user_id, duration, reward, date } = validate(createBreathingActivitySchema, req.body)
 
-    return prismaClient.$transaction(async (prisma) => {
-        const user = await prisma.user.findUnique({
-            where: { user_id },
-        })
+    const user = await prismaClient.user.findUnique({
+        where: { user_id },
+    })
 
-        if (!user) {
-            throw new ResponseError(
-                errors.HTTP.CODE.NOT_FOUND,
-                errors.HTTP.STATUS.NOT_FOUND,
-                errors.USER.NOT_FOUND
-            )
-        }
+    if (!user) {
+        throw new ResponseError(
+            errors.HTTP.CODE.NOT_FOUND,
+            errors.HTTP.STATUS.NOT_FOUND,
+            errors.USER.NOT_FOUND
+        )
+    }
 
-        const breathingActivity = await prisma.breathingActivity.create({
-            data: {
-                duration,
-                reward,
-            },
-        })
+    const breathingActivity = await prismaClient.breathingActivity.create({
+        data: {
+            duration,
+            reward,
+        },
+    })
 
-        await activityLogService.createOrUpdateActivityLog({
-            user_id,
-            breathing_id: breathingActivity.breathing_id,
-            date,
-        })
-
-        return breathingActivity
+    return activityLogService.createOrUpdateActivityLog({
+        user_id,
+        breathing_id: breathingActivity.breathing_id,
+        reward,
+        date,
     })
 }
 
