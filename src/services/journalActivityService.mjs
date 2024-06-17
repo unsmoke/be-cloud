@@ -5,10 +5,6 @@ import { validate } from 'uuid'
 import { createJournalActivitySchema } from '../validations/journalActivityValidations.mjs'
 import activityLogService from './activityLogService.mjs'
 
-const fetchAllJournalActivities = async () => {
-    return prismaClient.journalActivity.findMany()
-}
-
 const fetchJournalActivityById = async (id) => {
     const journalActivity = await prismaClient.journalActivity.findUnique({
         where: { journal_id: parseInt(id) },
@@ -45,21 +41,7 @@ const createJournalActivity = async (req) => {
     })
 }
 
-const updateJournalActivity = async (id, data) => {
-    return prismaClient.journalActivity.update({
-        where: { journal_id: parseInt(id) },
-        data,
-    })
-}
-
-const deleteJournalActivity = async (id) => {
-    await prismaClient.journalActivity.delete({ where: { journal_id: parseInt(id) } })
-}
-
 export default {
-    fetchAllJournalActivities,
     fetchJournalActivityById,
     createJournalActivity,
-    updateJournalActivity,
-    deleteJournalActivity,
 }
