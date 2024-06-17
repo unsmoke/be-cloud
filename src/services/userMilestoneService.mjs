@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
 import { createUserMilestoneSchema } from '../validations/userMilestoneValidations.mjs'
+import { validate } from '../validations/validation.mjs'
 
 const prisma = new PrismaClient()
 
@@ -20,17 +21,10 @@ const fetchMilestoneDetail = async (id) => {
 }
 
 const createMilestone = async (req) => {
-    const { error, value } = createUserMilestoneSchema.validate(req.body)
-
-    if (error) {
-        throw new ResponseError(
-            errors.HTTP.CODE.BAD_REQUEST,
-            errors.HTTP.STATUS.BAD_REQUEST,
-            error.details[0].message
-        )
-    }
-
-    const { title, description, target_value, achieved_value, date_achieved, user_id } = value
+    const { title, description, target_value, achieved_value, date_achieved, user_id } = validate(
+        createUserMilestoneSchema,
+        req.body
+    )
 
     return await prisma.userMilestone.create({
         data: {
@@ -38,7 +32,7 @@ const createMilestone = async (req) => {
             description,
             target_value,
             achieved_value,
-            date_achieved: new Date(date_achieved * 1000), // Convert epoch to Date
+            date_achieved: new Date(date_achieved * 1000),
             user_id,
         },
     })

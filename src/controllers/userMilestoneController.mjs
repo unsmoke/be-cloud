@@ -1,10 +1,14 @@
 import userMilestoneService from '../services/userMilestoneService.mjs'
+import { responseSuccess } from '../utils/responseAPI.mjs'
+import { success } from '../utils/messageSuccess.mjs'
 
 const getMilestoneDetail = async (req, res, next) => {
     try {
         const { id } = req.params
-        const userMilestone = await userMilestoneService.fetchMilestoneDetail(id)
-        res.status(200).json(userMilestone)
+        const result = await userMilestoneService.fetchMilestoneDetail(id)
+        res.status(success.HTTP.CODE.OK).send(
+            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
+        )
     } catch (error) {
         next(error)
     }
@@ -12,8 +16,10 @@ const getMilestoneDetail = async (req, res, next) => {
 
 const createNewMilestone = async (req, res, next) => {
     try {
-        const userMilestone = await userMilestoneService.createMilestone(req)
-        res.status(201).json(userMilestone)
+        const result = await userMilestoneService.createMilestone(req)
+        res.status(success.HTTP.CODE.OK).send(
+            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
+        )
     } catch (error) {
         next(error)
     }
