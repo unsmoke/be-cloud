@@ -41,6 +41,14 @@ const createBreathingActivity = async (req) => {
         },
     })
 
+    if (!breathingActivity) {
+        throw new ResponseError(
+            errors.HTTP.CODE.NOT_FOUND,
+            errors.HTTP.STATUS.NOT_FOUND,
+            errors.BREATHING_ACTIVITY.NOT_FOUND
+        )
+    }
+
     return activityLogService.createOrUpdateActivityLog({
         user_id,
         breathing_id: breathingActivity.breathing_id,
