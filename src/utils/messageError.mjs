@@ -114,6 +114,14 @@ const JOURNAL_ACTIVITY = {
         BASE: 'date must be a number',
         INTEGER: 'date must be an integer',
     },
+    ID: {
+        REQUIRED: 'id is required',
+        BASE: 'id must be a valid number',
+        POSITIVE: 'id must be a positive number',
+        CANNOT_BE_EMPTY: 'id cannot be left empty',
+        IS_REQUIRED: 'please specify the id',
+        MUST_BE_VALID: 'id must be a valid',
+    },
 }
 
 const USER_MILESTONE = {

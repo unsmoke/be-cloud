@@ -31,4 +31,16 @@ const createJournalActivitySchema = Joi.object({
     'object.unknown': errors.HTTP.MESSAGE.UNKNOWN_BODY_ERROR,
 })
 
-export { createJournalActivitySchema }
+const activityLogIdSchema = Joi.object({
+    id: Joi.string()
+        .required()
+        .messages({
+            'any.required': `${errors.JOURNAL_ACTIVITY.ID.IS_REQUIRED}`,
+            'string.empty': `${errors.JOURNAL_ACTIVITY.ID.CANNOT_BE_EMPTY}`,
+            'string.base': `${errors.JOURNAL_ACTIVITY.ID.MUST_BE_VALID}`,
+        }),
+}).messages({
+    'object.unknown': `${errors.HTTP.MESSAGE.UNKNOWN_BODY_ERROR}`,
+})
+
+export { createJournalActivitySchema, activityLogIdSchema }
