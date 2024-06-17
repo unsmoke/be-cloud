@@ -20,7 +20,6 @@ const fetchMilestoneDetail = async (id) => {
 }
 
 const createMilestone = async (req) => {
-    // Validate the input
     const { error, value } = createUserMilestoneSchema.validate(req.body)
 
     if (error) {
@@ -33,8 +32,7 @@ const createMilestone = async (req) => {
 
     const { title, description, target_value, achieved_value, date_achieved, user_id } = value
 
-    // Create the user milestone
-    const userMilestone = await prisma.userMilestone.create({
+    return await prisma.userMilestone.create({
         data: {
             title,
             description,
@@ -44,8 +42,6 @@ const createMilestone = async (req) => {
             user_id,
         },
     })
-
-    return userMilestone
 }
 
 export default {
