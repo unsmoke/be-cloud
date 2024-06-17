@@ -115,13 +115,12 @@ const createUserHealth = async (data, user_id) => {
     } catch (error) {
         throw new Error(error)
     }
-    
+
     const predictionsLen2 =
-    Math.abs(predictions[0] - 1) < Math.abs(predictions[2] - 1) ||
-    Math.abs(predictions[1] - 1) < Math.abs(predictions[2] - 1)
-    ? [1, 0]
-    : [0, 1]
-    
+        Math.abs(predictions[0] - 1) < Math.abs(predictions[2] - 1) ||
+        Math.abs(predictions[1] - 1) < Math.abs(predictions[2] - 1)
+            ? [1, 0]
+            : [0, 1]
 
     const optimalPlanIndex = predictionsLen2.reduce(
         (closestIndex, currentValue, currentIndex, array) => {
@@ -153,7 +152,6 @@ const createUserHealth = async (data, user_id) => {
     }
 
     return predictionsLen2
-    
 }
 
 const updateUserHealth = async (user_id, data) => {

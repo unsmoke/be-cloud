@@ -85,6 +85,7 @@ const BREATHING_ACTIVITY = {
         BASE: 'date must be a number',
         INTEGER: 'date must be an integer',
     },
+    NOT_FOUND: 'breathing activity not found',
 }
 
 const JOURNAL_ACTIVITY = {

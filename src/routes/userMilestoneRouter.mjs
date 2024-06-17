@@ -4,11 +4,11 @@ import authMiddleware from '../middlewares/authMiddleware.mjs'
 
 const userMilestoneRouter = express.Router()
 
-userMilestoneRouter.get(
-    '/user-milestones',
-    authMiddleware,
-    userMilestoneController.getAllMilestones
-)
+// userMilestoneRouter.get(
+//     '/user-milestones',
+//     authMiddleware,
+//     userMilestoneController.getAllMilestones
+// )
 userMilestoneRouter.get(
     '/user-milestones/:id',
     authMiddleware,
@@ -19,15 +19,15 @@ userMilestoneRouter.post(
     authMiddleware,
     userMilestoneController.createNewMilestone
 )
-userMilestoneRouter.put(
-    '/user-milestones/:id',
-    authMiddleware,
-    userMilestoneController.updateMilestone
-)
-userMilestoneRouter.delete(
-    '/user-milestones/:id',
-    authMiddleware,
-    userMilestoneController.deleteMilestone
-)
+// userMilestoneRouter.put(
+//     '/user-milestones/:id',
+//     authMiddleware,
+//     userMilestoneController.updateMilestone
+// )
+// userMilestoneRouter.delete(
+//     '/user-milestones/:id',
+//     authMiddleware,
+//     userMilestoneController.deleteMilestone
+// )
 
 export default userMilestoneRouter
