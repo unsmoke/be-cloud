@@ -13,12 +13,23 @@ userItemRouter.get(
     validateUserItemParams,
     userItemController.getUserItemDetail
 )
+
+// Buy Item
 userItemRouter.post(
     '/inventory',
     authMiddleware,
     validateUserItem,
     userItemController.createUserItem
 )
+
+// Equip Item
+userItemRouter.put(
+    '/inventory/equip',
+    authMiddleware,
+    validateUserItem,
+    userItemController.equipUserItem
+)
+
 // userItemRouter.put(
 //     '/inventory/:user_id/:item_id',
 //     authMiddleware,

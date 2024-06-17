@@ -61,6 +61,18 @@ const createUserItem = async (req, res, next) => {
     }
 }
 
+const equipUserItem = async (req, res, next) => {
+    try {
+        const { user_id, item_id } = req.body
+        const newUserItem = await userItemService.attachUserItem(user_id, item_id)
+        res.status(success.HTTP.CODE.CREATED).send(
+            responseSuccess(success.HTTP.CODE.CREATED, success.HTTP.STATUS.CREATED, newUserItem)
+        )
+    } catch (e) {
+        next(e)
+    }
+}
+
 const updateUserItem = async (req, res, next) => {
     try {
         const { user_id, item_id } = req.params
@@ -115,4 +127,5 @@ export default {
     createUserItem,
     updateUserItem,
     deleteUserItem,
+    equipUserItem,
 }

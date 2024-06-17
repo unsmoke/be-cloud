@@ -133,6 +133,8 @@ const fetchUser = async (user_id) => {
                 city: true,
                 is_premium: true,
                 profile_url: true,
+                current_lung: true,
+                current_day: true,
                 created_at: true,
                 updated_at: true,
             },

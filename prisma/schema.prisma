@@ -24,6 +24,8 @@ model User {
   city               String?
   is_premium         Boolean         @default(false)
   profile_url        String?
+  current_day        Int?            @default(0)
+  current_lung       String?
   created_at         DateTime        @default(now())
   updated_at         DateTime        @default(now()) @updatedAt
   user_items         UserItem[]

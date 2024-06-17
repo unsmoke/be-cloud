@@ -104,6 +104,70 @@ const createUserItem = async (user_id, item_id) => {
     })
 }
 
+const attachUserItem = async (user_id, item_id) => {
+    if (item_id === '00000000-0000-4000-8000-000000000000') {
+        const user = await prismaClient.user.update({
+            where: { user_id: user_id },
+            data: {
+                current_lung: 'https://storage.googleapis.com/unsmoke-assets/lungs/plain-lung.svg',
+            },
+            select: {
+                user_id: true,
+                username: true,
+            },
+        })
+
+        return {
+            user_id: user.user_id,
+            username: user.username,
+            current_lung: 'https://storage.googleapis.com/unsmoke-assets/lungs/plain-lung.svg',
+            item_id: '00000000-0000-4000-8000-000000000000',
+            item_name: 'Plain Lung',
+            description: 'Plain lung',
+        }
+    }
+
+    const userItem = await prismaClient.userItem.findUnique({
+        where: {
+            user_id_item_id: {
+                user_id: user_id,
+                item_id: item_id,
+            },
+        },
+    })
+
+    if (!userItem) {
+        throw new Error('User does not have the item')
+    }
+
+    const item = await prismaClient.item.findUnique({
+        where: {
+            item_id: item_id,
+        },
+    })
+
+    const user = await prismaClient.user.update({
+        where: { user_id: user_id },
+        data: {
+            current_lung: item.lung_url,
+        },
+        select: {
+            user_id: true,
+            username: true,
+            current_lung: true,
+        },
+    })
+
+    return {
+        user_id: user.user_id,
+        username: user.username,
+        current_lung: user.current_lung,
+        item_id: userItem.item_id,
+        item_name: userItem.name,
+        description: userItem.description,
+    }
+}
+
 const modifyUserItem = async (user_id, item_id, new_item_id) => {
     return await prismaClient.userItem.update({
         where: {
@@ -136,4 +200,5 @@ export default {
     createUserItem,
     modifyUserItem,
     removeUserItem,
+    attachUserItem,
 }
