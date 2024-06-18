@@ -46,12 +46,9 @@ export const generateJournalResponse = async () => {
         },
     ]
 
-    const result = await model.generateContent({
+    return await model.generateContent({
         contents: [{ role: 'user', parts }],
         generationConfig,
         safetySettings,
     })
-
-    const { response } = result
-    return response.text()
 }

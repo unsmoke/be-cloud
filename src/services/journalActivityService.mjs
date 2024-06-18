@@ -56,7 +56,12 @@ const createJournalActivity = async (req) => {
         date,
     })
 
-    return generateJournalResponse()
+    const journalResponse = await generateJournalResponse()
+
+    if (journalResponse) {
+        const { response } = journalResponse
+        return response
+    }
 }
 
 export default {
