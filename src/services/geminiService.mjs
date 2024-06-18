@@ -38,9 +38,11 @@ export const generateJournalResponse = async () => {
         },
     ]
 
+    const prompt = `Saya memiliki sebuah journaling yang saya tulis mengenai komitment saya terhadap perjalanan saya dalam berhenti merokok. Adapun journaling komitment saya pada hari ini adalah sebabagai berikut: "Saya ingin berhenti merokok karena saya ingin menghemat pengeluaran asya". Tolong buatkan pesan motivasi berdasarkan journaling di atas yang akan saya tampilkan di notifikasi hp saya setiap 6 jam sekali. Adapun tolong berikan dalam bentuk JSON yang terdiri dari id dan pesannya.`
+
     const parts = [
         {
-            text: `Saya memiliki sebuah journaling yang saya tulis mengenai komitment saya terhadap perjalanan saya dalam berhenti merokok. Adapun journaling komitment saya pada hari ini adalah sebabagai berikut: "Saya ingin berhenti merokok karena saya ingin menghemat pengeluaran asya". Tolong buatkan pesan motivasi berdasarkan journaling di atas yang akan saya tampilkan di notifikasi hp saya setiap 6 jam sekali. Adapun tolong berikan dalam bentuk JSON yang terdiri dari id dan pesannya.`,
+            text: prompt,
         },
     ]
 
