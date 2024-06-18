@@ -161,6 +161,27 @@ const RELAPSE = {
     USER_NOT_FOUND: 'user not found',
     PLAN_NOT_FOUND: 'user plan not found',
     RELAPSE_FAILED: 'failed to process relapse',
+    REWARD: {
+        REQUIRED: 'reward is required',
+        BASE: 'reward must be a number',
+        POSITIVE: 'reward must be a positive number',
+    },
+    DATE: {
+        REQUIRED: 'date is required',
+        BASE: 'date must be a number',
+        INTEGER: 'date must be an integer',
+    },
+    CIGARETTES_THIS_DAY: {
+        REQUIRED: 'cigarettes this day is required',
+        BASE: 'cigarettes this day must be a number',
+        INTEGER: 'cigarettes this day must be an integer',
+    },
+    USER_ID: {
+        REQUIRED: 'user id is required',
+        BASE: 'user id must be a valid string',
+        CANNOT_BE_EMPTY: 'user id cannot be left empty',
+        EMPTY: 'user id cannot be empty',
+    },
 }
 
 export const errors = {

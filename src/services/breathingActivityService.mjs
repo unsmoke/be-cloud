@@ -4,6 +4,7 @@ import { errors } from '../utils/messageError.mjs'
 import { validate } from '../validations/validation.mjs'
 import { createBreathingActivitySchema } from '../validations/breathingActivityValidations.mjs'
 import activityLogService from './activityLogService.mjs'
+import { logger } from '../app/logging.mjs'
 
 const fetchBreathingActivityById = async (id) => {
     const breathingActivity = await prismaClient.breathingActivity.findUnique({
@@ -49,12 +50,34 @@ const createBreathingActivity = async (req) => {
         )
     }
 
-    return activityLogService.createOrUpdateActivityLog({
+    await activityLogService.createOrUpdateActivityLog({
         user_id,
         breathing_id: breathingActivity.breathing_id,
         reward,
         date,
     })
+
+    const highestDurationBreathingActivity = await prismaClient.activityLog.findFirst({
+        where: {
+            user_id,
+            breathing_id: {
+                not: null,
+            },
+        },
+        orderBy: {
+            breathing: {
+                duration: 'desc',
+            },
+        },
+        take: 1,
+        include: {
+            breathing: true,
+        },
+    })
+
+    return {
+        highestDuration: highestDurationBreathingActivity?.breathing?.duration,
+    }
 }
 
 export default {
