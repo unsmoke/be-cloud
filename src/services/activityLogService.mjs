@@ -131,42 +131,8 @@ const createOrUpdateActivityLog = async ({
         }
 
         const user = await prisma.user.findUnique({ where: { user_id } })
-        const userHealth = await prisma.userHealth.findUnique({ where: { user_id } })
 
-        let updateData = { exp: user.exp }
-
-        const newActivityLog = await prisma.activityLog.findFirst({
-            where: {
-                user_id,
-                date: {
-                    gte: startOfDay,
-                    lte: endOfDay,
-                },
-            },
-            select: {
-                activity_log_id: true,
-                breathing_id: true,
-                journal_id: true,
-            },
-        })
-
-        if (newActivityLog.breathing_id && newActivityLog.journal_id) {
-            const cigarettesPerDay = userHealth.cigarettes_per_day
-            const cigarettesAvoidedToday = cigarettesPerDay / 24
-
-            updateData = {
-                ...updateData,
-                streak_count: user.streak_count + 1,
-                money_saved:
-                    user.money_saved +
-                    (userHealth.pack_price / userHealth.cigarettes_per_pack) *
-                        cigarettesAvoidedToday,
-                cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
-                cigarettes_quota: [...user.cigarettes_quota, Math.floor(cigarettesAvoidedToday)],
-            }
-        } else if (newActivityLog.breathing_id || newActivityLog.journal_id) {
-            updateData.exp += reward
-        }
+        const updateData = { exp: user.exp + reward }
 
         return prisma.user.update({
             where: { user_id },
