@@ -45,6 +45,8 @@ const fetchLeaderboardProvince = async (province_id, sort_by = 'exp', page = 1, 
     return paginatedUsers.map((user) => ({
         username: user.username,
         exp: user.exp,
+        profile_url: user.profile_url,
+        current_lung: user.current_lung,
         rank: user.rank,
     }))
 }
@@ -70,6 +72,8 @@ const fetchLeaderboardCity = async (city_id, sort_by = 'exp', page = 1, per_page
     return paginatedUsers.map((user) => ({
         username: user.username,
         exp: user.exp,
+        profile_url: user.profile_url,
+        current_lung: user.current_lung,
         rank: user.rank,
     }))
 }
