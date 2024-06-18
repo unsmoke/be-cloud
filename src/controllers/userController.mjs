@@ -61,10 +61,49 @@ const updateUserProfile = async (req, res, next) => {
     }
 }
 
+const verifyEmail = async (req, res, next) => {
+    try {
+        const { email, token } = req.body
+        const result = await userService.verifyUserEmail(email, token)
+        res.status(success.HTTP.CODE.OK).send(
+            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
+        )
+    } catch (e) {
+        next(e)
+    }
+}
+
+const forgotPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const result = await userService.forgotUserPassword(email)
+        res.status(success.HTTP.CODE.OK).send(
+            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
+        )
+    } catch (e) {
+        next(e)
+    }
+}
+
+const resetPassword = async (req, res, next) => {
+    try {
+        const { email, token, new_password } = req.body
+        const result = await userService.resetUserPassword(email, token, new_password)
+        res.status(success.HTTP.CODE.OK).send(
+            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
+        )
+    } catch (e) {
+        next(e)
+    }
+}
+
 export default {
     login,
     register,
     refresh,
     getUser,
     updateUserProfile,
+    verifyEmail,
+    forgotPassword,
+    resetPassword,
 }

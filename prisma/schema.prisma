@@ -26,6 +26,7 @@ model User {
   profile_url        String?
   current_day        Int?            @default(0)
   current_lung       String?
+  active             Boolean         @default(false)
   created_at         DateTime        @default(now())
   updated_at         DateTime        @default(now()) @updatedAt
   user_items         UserItem[]
@@ -35,6 +36,7 @@ model User {
   user_plans         UserPlan[]
   user_milestones    UserMilestone[]
   user_relapses      UserRelapse[]
+  tokens             Token[]
 }
 
 model Item {
@@ -157,4 +159,15 @@ model UserRelapse {
   user_id    String
   date       DateTime
   user       User     @relation(fields: [user_id], references: [user_id])
+}
+
+model Token {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  user_id    String
+  expires_at DateTime
+  user       User     @relation(fields: [user_id], references: [user_id])
+  created_at DateTime @default(now())
+
+  @@index([user_id])
 }

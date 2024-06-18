@@ -7,6 +7,7 @@ import tokenService from './tokenService.mjs'
 import { generateUsername } from '../utils/usernameGenerator.mjs'
 import { v4 as uuidv4 } from 'uuid'
 import { bucket } from '../configs/gcsConfig.mjs'
+import { sendVerificationEmail, sendResetPasswordEmail } from '../utils/emailUtils.mjs'
 
 dotenv.config()
 
@@ -47,6 +48,9 @@ const registerUser = async (requestBody) => {
             },
         })
     }
+
+    const token = await tokenService.generateToken(newUser.user_id)
+    await sendVerificationEmail(email, token)
 
     return newUser
 }
@@ -201,4 +205,70 @@ const modifyUserProfile = async (user_id, username, file) => {
     return updatedUser
 }
 
-export default { registerUser, loginUser, fetchUser, modifyUserProfile }
+const verifyUserEmail = async (email, token) => {
+    const user = await prismaClient.user.findUnique({ where: { email } })
+
+    if (!user) {
+        throw new Error('User not found')
+    }
+
+    const isValid = await tokenService.verifyToken(user.user_id, token)
+
+    if (!isValid) {
+        throw new Error('Token not valid')
+    }
+
+    await prismaClient.user.update({
+        where: { user_id: user.user_id },
+        data: { active: true },
+    })
+
+    return {}
+}
+
+const forgotUserPassword = async (email) => {
+    const user = await prismaClient.user.findUnique({ where: { email } })
+
+    if (!user) {
+        throw new Error('User not found')
+    }
+
+    const token = await tokenService.generateToken(user.user_id)
+    await sendResetPasswordEmail(email, token)
+
+    return { message: 'Password reset token sent to email' }
+}
+
+const resetUserPassword = async (email, token, new_password) => {
+    const user = await prismaClient.user.findUnique({ where: { email } })
+
+    if (!user) {
+        throw new Error('User not found')
+    }
+
+    const isValid = await tokenService.verifyToken(user.user_id, token)
+
+    if (!isValid) {
+        throw new Error('Token not valid')
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(new_password, salt)
+
+    await prismaClient.user.update({
+        where: { user_id: user.user_id },
+        data: { password: hashedPassword },
+    })
+
+    return { message: 'Password reset successful' }
+}
+
+export default {
+    registerUser,
+    loginUser,
+    fetchUser,
+    modifyUserProfile,
+    verifyUserEmail,
+    forgotUserPassword,
+    resetUserPassword,
+}
