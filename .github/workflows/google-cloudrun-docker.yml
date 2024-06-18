@@ -63,6 +63,8 @@ jobs:
                       JWT_SECRET=${{ secrets.JWT_SECRET }}
                       MODEL_URL=${{ secrets.MODEL_URL }}
                       API_KEY_GEMINI=${{ secrets.API_KEY_GEMINI }}
+                      EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }}
+                      EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
 
             - name: Show Output
               run: echo ${{ steps.deploy.outputs.url }}

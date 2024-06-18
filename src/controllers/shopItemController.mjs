@@ -33,11 +33,11 @@ const getShopItemDetail = async (req, res, next) => {
 
         if (!shopItem) {
             return res
-                .status(failure.HTTP.CODE.NOT_FOUND)
+                .status(errors.HTTP.CODE.NOT_FOUND)
                 .send(
                     responseError(
-                        failure.HTTP.CODE.NOT_FOUND,
-                        failure.HTTP.STATUS.NOT_FOUND,
+                        errors.HTTP.CODE.NOT_FOUND,
+                        errors.HTTP.STATUS.NOT_FOUND,
                         'Shop item not found'
                     )
                 )
