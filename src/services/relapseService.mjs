@@ -1,9 +1,8 @@
-import { PrismaClient } from '@prisma/client'
-import { ResponseError } from '../utils/responseError.mjs'
-import { errors } from '../utils/messageError.mjs'
-import { createRelapseSchema } from '../validations/relapseValidation.mjs'
-import { validate } from '../validations/validation.mjs'
-import { logger } from '../app/logging.mjs'
+import { PrismaClient } from "@prisma/client";
+import { ResponseError } from "../utils/responseError.mjs";
+import { errors } from "../utils/messageError.mjs";
+import { createRelapseSchema } from "../validations/relapseValidation.mjs";
+import { validate } from "../validations/validation.mjs";
 
 const prisma = new PrismaClient()
 
@@ -107,6 +106,9 @@ const handleRelapse = async (req) => {
                     cigarettes_quota: updatedCigarettesQuota,
                     current_day: user.current_day + 1,
                 },
+                select: {
+                    streak_count: true,
+                }
             })
         }
     })
