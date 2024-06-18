@@ -1,13 +1,18 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai'
 import { logger } from '../app/logging.mjs'
+import { ResponseError } from '../utils/responseError.mjs'
+import { errors } from '../utils/messageError.mjs'
 
 export const generateJournalResponse = async () => {
     const MODEL_NAME = 'gemini-1.0-pro'
-    const { API_KEY } = process.env
+    const API_KEY = process.env.API_KEY_GEMINI
 
     if (!API_KEY) {
-        logger.info('Please provide the API_KEY..')
-        return
+        throw new ResponseError(
+            errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
+            errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
+            'please provide the gemini api key'
+        )
     }
 
     const genAI = new GoogleGenerativeAI(API_KEY)
@@ -46,9 +51,24 @@ export const generateJournalResponse = async () => {
         },
     ]
 
-    return await model.generateContent({
+    const result = await model.generateContent({
         contents: [{ role: 'user', parts }],
         generationConfig,
         safetySettings,
     })
+
+    const { response } = result
+
+    const responseText = response.text()
+    const jsonDataMatch = responseText.match(/```json\n([\s\S]*?)\n```/)
+
+    if (jsonDataMatch && jsonDataMatch[1]) {
+        return JSON.parse(jsonDataMatch[1])
+    } else {
+        throw new ResponseError(
+            errors.HTTP.CODE.INTERNAL_SERVER_ERROR,
+            errors.HTTP.STATUS.INTERNAL_SERVER_ERROR,
+            'failed to parse the json response from gemini api'
+        )
+    }
 }
