@@ -75,9 +75,6 @@ const createBreathingActivity = async (req) => {
         },
     })
 
-    logger.info('kiw')
-    logger.info(highestDurationBreathingActivity?.breathing?.duration)
-
     return {
         highestDuration: highestDurationBreathingActivity?.breathing?.duration,
     }
