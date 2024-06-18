@@ -41,6 +41,14 @@ const handleRelapse = async (req) => {
             },
         })
 
+        if (!activityLog.breathing_id || !activityLog.journal_id) {
+            throw new ResponseError(
+                errors.HTTP.CODE.NOT_FOUND,
+                errors.HTTP.STATUS.NOT_FOUND,
+                'there is no breathing activity or journal activity in this date'
+            )
+        }
+
         const checkCigaretteThisDay = await prisma.user.findFirst({
             where: {
                 user_id,
@@ -51,8 +59,6 @@ const handleRelapse = async (req) => {
         })
 
         const cigaretteQuotaThisDay = checkCigaretteThisDay.cigarettes_quota[0]
-
-        logger.info(checkCigaretteThisDay.cigarettes_quota)
 
         const userHealth = await prisma.userHealth.findUnique({
             where: { user_id },
