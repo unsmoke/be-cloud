@@ -62,6 +62,7 @@ jobs:
                       JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
                       JWT_SECRET=${{ secrets.JWT_SECRET }}
                       MODEL_URL=${{ secrets.MODEL_URL }}
+                      API_KEY_GEMINI=${{ secrets.API_KEY_GEMINI }}
 
             - name: Show Output
               run: echo ${{ steps.deploy.outputs.url }}

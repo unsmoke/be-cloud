@@ -7,6 +7,7 @@ import {
     activityLogIdSchema,
 } from '../validations/journalActivityValidations.mjs'
 import activityLogService from './activityLogService.mjs'
+import { generateJournalResponse } from './geminiService.mjs'
 
 const fetchJournalActivityById = async (req) => {
     const { id } = validate(activityLogIdSchema, req.params)
@@ -48,12 +49,14 @@ const createJournalActivity = async (req) => {
         },
     })
 
-    return activityLogService.createOrUpdateActivityLog({
+    await activityLogService.createOrUpdateActivityLog({
         user_id,
         journal_id: journalActivity.journal_id,
         reward,
         date,
     })
+
+    return generateJournalResponse()
 }
 
 export default {
