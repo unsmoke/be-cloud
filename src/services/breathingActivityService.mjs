@@ -56,10 +56,12 @@ const createBreathingActivity = async (req) => {
         date,
     })
 
-    // return the maximum duration
-    const highestDurationBreathingActivity = await prismaClient.breathingActivity.findFirst({
+    const highestDurationBreathingActivity = await prismaClient.activityLog.findMany({
+        where: { user_id },
         orderBy: {
-            duration: 'desc',
+            breathing: {
+                duration: 'desc',
+            },
         },
         take: 1,
     })
