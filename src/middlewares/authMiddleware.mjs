@@ -27,34 +27,34 @@ const authMiddleware = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decoded
 
-        // // Check if user is verified
-        // const user = await prismaClient.user.findUnique({
-        //     where: { user_id: decoded.userId },
-        // })
+        // Check if user is verified
+        const user = await prismaClient.user.findUnique({
+            where: { user_id: decoded.userId },
+        })
 
-        // if (!user) {
-        //     return res
-        //         .status(errors.HTTP.CODE.UNAUTHORIZED)
-        //         .send(
-        //             responseError(
-        //                 errors.HTTP.CODE.UNAUTHORIZED,
-        //                 errors.HTTP.STATUS.UNAUTHORIZED,
-        //                 errors.HTTP.MESSAGE.UNAUTHORIZED
-        //             )
-        //         )
-        // }
+        if (!user) {
+            return res
+                .status(errors.HTTP.CODE.UNAUTHORIZED)
+                .send(
+                    responseError(
+                        errors.HTTP.CODE.UNAUTHORIZED,
+                        errors.HTTP.STATUS.UNAUTHORIZED,
+                        errors.HTTP.MESSAGE.UNAUTHORIZED
+                    )
+                )
+        }
 
-        // if (!user.active) {
-        //     return res
-        //         .status(errors.HTTP.CODE.FORBIDDEN)
-        //         .send(
-        //             responseError(
-        //                 errors.HTTP.CODE.FORBIDDEN,
-        //                 errors.HTTP.STATUS.FORBIDDEN,
-        //                 'User not verified'
-        //             )
-        //         )
-        // }
+        if (!user.active) {
+            return res
+                .status(errors.HTTP.CODE.FORBIDDEN)
+                .send(
+                    responseError(
+                        errors.HTTP.CODE.FORBIDDEN,
+                        errors.HTTP.STATUS.FORBIDDEN,
+                        'User not verified'
+                    )
+                )
+        }
 
         next()
     } catch (e) {
