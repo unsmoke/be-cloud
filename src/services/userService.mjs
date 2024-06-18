@@ -76,6 +76,14 @@ const loginUser = async (requestBody) => {
         )
     }
 
+    if (user.active === false) {
+        throw new ResponseError(
+            errors.HTTP.CODE.UNAUTHORIZED,
+            errors.HTTP.STATUS.UNAUTHORIZED,
+            'Please verify your email first'
+        )
+    }
+
     const payload = { userId: user.user_id }
 
     const accessToken = tokenService.generateAccessToken(payload)
@@ -108,6 +116,9 @@ const fetchUser = async (user_id) => {
                 city: true,
                 is_premium: true,
                 profile_url: true,
+                current_lung: true,
+                current_day: true,
+                active: true,
                 created_at: true,
                 updated_at: true,
             },
@@ -139,6 +150,7 @@ const fetchUser = async (user_id) => {
                 profile_url: true,
                 current_lung: true,
                 current_day: true,
+                active: true,
                 created_at: true,
                 updated_at: true,
             },
