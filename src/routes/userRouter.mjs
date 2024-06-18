@@ -34,6 +34,9 @@ userRouter.put(
     upload.single('file'),
     userController.updateUserProfile
 )
+userRouter.post('/user/verify', userController.verifyEmail)
+userRouter.post('/user/forgot-password', userController.forgotPassword)
+userRouter.post('/user/reset-password', userController.resetPassword)
 
 // Test middleware
 userRouter.get('/protected-route', authMiddleware, (req, res) => {
