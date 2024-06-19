@@ -58,13 +58,6 @@ const handleRelapse = async (req) => {
             },
         })
 
-        const cigaretteQuotaThisDay = checkCigaretteUserQuota.cigarettes_quota[0]
-        const updatedCigarettesQuota = [...checkCigaretteUserQuota.cigarettes_quota]
-        updatedCigarettesQuota.shift()
-        const cigarettesAvoidedToday = cigaretteQuotaThisDay - cigarettes_this_day
-        const moneySavedToday =
-            (cigarettesAvoidedToday / userHealth.cigarettes_per_pack) * userHealth.pack_price
-
         const userHealth = await prisma.userHealth.findUnique({
             where: { user_id },
             select: {
@@ -81,6 +74,13 @@ const handleRelapse = async (req) => {
                 errors.RELAPSE.NO_USER_HEALTH
             )
         }
+
+        const cigaretteQuotaThisDay = checkCigaretteUserQuota.cigarettes_quota[0]
+        const updatedCigarettesQuota = [...checkCigaretteUserQuota.cigarettes_quota]
+        updatedCigarettesQuota.shift()
+        const cigarettesAvoidedToday = cigaretteQuotaThisDay - cigarettes_this_day
+        const moneySavedToday =
+            (cigarettesAvoidedToday / userHealth.cigarettes_per_pack) * userHealth.pack_price
 
         if (!activityLog.breathing_id || !activityLog.journal_id) {
             return await prisma.user.update({
