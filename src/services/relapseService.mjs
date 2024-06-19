@@ -104,6 +104,9 @@ const handleRelapse = async (req) => {
                     money_saved: user.money_saved + moneySavedToday,
                     cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
                 },
+                select: {
+                    streak_count: true,
+                },
             })
         }
 
