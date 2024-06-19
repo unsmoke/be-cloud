@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { ResponseError } from '../utils/responseError.js'
+import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
 import { fetchIdMilestoneSchema } from '../validations/userMilestoneValidations.js'
 import { validate } from '../validations/validation.js'
@@ -24,7 +24,7 @@ const fetchMilestoneDetail = async (req) => {
     return checkMilestones(user)
 }
 
-const checkMilestones = (user, userHealth) => {
+const checkMilestones = (user) => {
     const milestones = [
         {
             title: 'Eternal Smoke-Free Warrior 🚭✨',
@@ -92,7 +92,7 @@ const checkMilestones = (user, userHealth) => {
         },
     ]
 
-    return milestones.filter((milestone) => milestone.condition(user, userHealth))
+    return milestones.filter((milestone) => milestone.condition(user))
 }
 
 export default {
