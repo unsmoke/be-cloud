@@ -35,12 +35,13 @@ const handleRelapse = async (req) => {
                 },
             },
             select: {
+                activity_log_id: true,
                 breathing_id: true,
                 journal_id: true,
             },
         })
 
-        if (!activityLog.breathing_id || !activityLog.journal_id) {
+        if (!activityLog.activity_log_id) {
             throw new ResponseError(
                 errors.HTTP.CODE.NOT_FOUND,
                 errors.HTTP.STATUS.NOT_FOUND,

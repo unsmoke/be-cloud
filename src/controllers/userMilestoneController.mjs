@@ -4,19 +4,7 @@ import { success } from '../utils/messageSuccess.mjs'
 
 const getMilestoneDetail = async (req, res, next) => {
     try {
-        const { id } = req.params
-        const result = await userMilestoneService.fetchMilestoneDetail(id)
-        res.status(success.HTTP.CODE.OK).send(
-            responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
-        )
-    } catch (error) {
-        next(error)
-    }
-}
-
-const createNewMilestone = async (req, res, next) => {
-    try {
-        const result = await userMilestoneService.createMilestone(req)
+        const result = await userMilestoneService.fetchMilestoneDetail(req)
         res.status(success.HTTP.CODE.OK).send(
             responseSuccess(success.HTTP.CODE.OK, success.HTTP.STATUS.OK, result)
         )
@@ -27,5 +15,4 @@ const createNewMilestone = async (req, res, next) => {
 
 export default {
     getMilestoneDetail,
-    createNewMilestone,
 }

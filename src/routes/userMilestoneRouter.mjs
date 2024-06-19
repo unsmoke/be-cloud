@@ -5,14 +5,9 @@ import authMiddleware from '../middlewares/authMiddleware.mjs'
 const userMilestoneRouter = express.Router()
 
 userMilestoneRouter.get(
-    '/user-milestones/:id',
+    '/user-milestones/:userId',
     authMiddleware,
     userMilestoneController.getMilestoneDetail
-)
-userMilestoneRouter.post(
-    '/user-milestones',
-    authMiddleware,
-    userMilestoneController.createNewMilestone
 )
 
 export default userMilestoneRouter
