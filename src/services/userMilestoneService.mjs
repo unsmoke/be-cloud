@@ -95,6 +95,53 @@ const checkMilestones = (user) => {
     return milestones.filter((milestone) => milestone.condition(user))
 }
 
+const fetchAllMilestone = async () => {
+    return [
+        {
+            title: 'Eternal Smoke-Free Warrior 🚭✨',
+            description: 'Tidak merokok 21/30 hari atau 42/60 hari.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%201.svg',
+        },
+        {
+            title: 'Gold Saver Champion 💰🏆',
+            description: 'Menghemat Rp 300.000 sebulan atau Rp 600.000 dua bulan.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%202.svg',
+        },
+        {
+            title: 'Habit Crusher Master 💥🔨',
+            description: 'Tidak merokok 80% dari hari dalam satu atau dua bulan.',
+
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%203.svg',
+        },
+        {
+            title: 'Lung Legend 🌬🏅',
+            description: 'Meningkatkan kapasitas paru-paru signifikan dalam satu atau dua bulan.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%204.svg',
+        },
+        {
+            title: 'Smoke-Free Milestone Conqueror 🎉🚫',
+            description: 'Menghindari 300 rokok sebulan atau 600 rokok dua bulan.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%205.svg',
+        },
+        {
+            title: 'Daily Consistency Guru ⏰🔒',
+            description: 'Menyelesaikan tugas harian 90% dari hari dalam satu atau dua bulan.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%206.svg',
+        },
+        {
+            title: 'Health Evolutionist 🌱🔄',
+            description: 'Meningkatkan performa paru-paru 15% sebulan atau 25% dua bulan.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%207.svg',
+        },
+        {
+            title: 'Exemplary Quitter Elite 🌟🚭',
+            description: 'Menyelesaikan semua tugas berhenti merokok dalam satu atau dua bulan.',
+            badgeUrl: 'https://storage.googleapis.com/unsmoke-assets/badges/badges%208.svg',
+        },
+    ]
+}
+
 export default {
     fetchMilestoneDetail,
+    fetchAllMilestone,
 }

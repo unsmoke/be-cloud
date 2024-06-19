@@ -7,7 +7,12 @@ import { validate } from '../validations/validation.mjs'
 const prisma = new PrismaClient()
 
 const handleRelapse = async (req) => {
-    const { reward, cigarettes_this_day, user_id, date } = validate(createRelapseSchema, req.body)
+    const {
+        reward = 0,
+        cigarettes_this_day = -1,
+        user_id,
+        date,
+    } = validate(createRelapseSchema, req.body)
 
     const user = await prisma.user.findUnique({
         where: { user_id },
@@ -81,6 +86,20 @@ const handleRelapse = async (req) => {
         const cigarettesAvoidedToday = cigaretteQuotaThisDay - cigarettes_this_day
         const moneySavedToday =
             (cigarettesAvoidedToday / userHealth.cigarettes_per_pack) * userHealth.pack_price
+
+        if (cigarettesAvoidedToday < 0) {
+            return await prisma.user.update({
+                where: { user_id },
+                data: {
+                    streak_count: 0,
+                    money_saved: user.money_saved + moneySavedToday,
+                    cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
+                },
+                select: {
+                    streak_count: true,
+                },
+            })
+        }
 
         if (!activityLog.breathing_id || !activityLog.journal_id) {
             return await prisma.user.update({

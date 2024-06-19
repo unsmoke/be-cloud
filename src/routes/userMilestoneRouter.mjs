@@ -9,5 +9,6 @@ userMilestoneRouter.get(
     authMiddleware,
     userMilestoneController.getMilestoneDetail
 )
+userMilestoneRouter.get('/user-milestones', authMiddleware, userMilestoneController.getAllMilestone)
 
 export default userMilestoneRouter
