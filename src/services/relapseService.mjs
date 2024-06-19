@@ -45,11 +45,11 @@ const handleRelapse = async (req) => {
             throw new ResponseError(
                 errors.HTTP.CODE.NOT_FOUND,
                 errors.HTTP.STATUS.NOT_FOUND,
-                'there is no breathing activity or journal activity in this date'
+                errors.RELAPSE.NO_ACTIVITY
             )
         }
 
-        const checkCigaretteThisDay = await prisma.user.findFirst({
+        const checkCigaretteUserQuota = await prisma.user.findFirst({
             where: {
                 user_id,
             },
@@ -58,7 +58,7 @@ const handleRelapse = async (req) => {
             },
         })
 
-        const cigaretteQuotaThisDay = checkCigaretteThisDay.cigarettes_quota[0]
+        const cigaretteQuotaThisDay = checkCigaretteUserQuota.cigarettes_quota[0]
 
         const userHealth = await prisma.userHealth.findUnique({
             where: { user_id },
@@ -73,7 +73,7 @@ const handleRelapse = async (req) => {
             throw new ResponseError(
                 errors.HTTP.CODE.NOT_FOUND,
                 errors.HTTP.STATUS.NOT_FOUND,
-                'User health record not found'
+                errors.RELAPSE.NO_USER_HEALTH
             )
         }
 
@@ -82,7 +82,6 @@ const handleRelapse = async (req) => {
             !activityLog.journal_id ||
             cigarettes_this_day > cigaretteQuotaThisDay
         ) {
-            // update the streak for the user to 0
             await prisma.user.update({
                 where: { user_id },
                 data: {
@@ -91,7 +90,7 @@ const handleRelapse = async (req) => {
             })
             return
         } else {
-            const updatedCigarettesQuota = [...checkCigaretteThisDay.cigarettes_quota]
+            const updatedCigarettesQuota = [...checkCigaretteUserQuota.cigarettes_quota]
             updatedCigarettesQuota.shift()
             const cigarettesAvoidedToday = cigaretteQuotaThisDay - cigarettes_this_day
             const moneySavedToday =

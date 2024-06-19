@@ -182,6 +182,8 @@ const RELAPSE = {
         CANNOT_BE_EMPTY: 'user id cannot be left empty',
         EMPTY: 'user id cannot be empty',
     },
+    NO_ACTIVITY: 'there is no breathing activity or journal activity in this date',
+    NO_USER_HEALTH: 'user health record not found',
 }
 
 export const errors = {
