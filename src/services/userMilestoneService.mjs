@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 import { ResponseError } from '../utils/responseError.mjs'
 import { errors } from '../utils/messageError.mjs'
-import { fetchIdMilestoneSchema } from '../validations/userMilestoneValidations.js'
-import { validate } from '../validations/validation.js'
+import { fetchIdMilestoneSchema } from '../validations/userMilestoneValidations.mjs'
+import { validate } from '../validations/validation.mjs'
 
 const prisma = new PrismaClient()
 
