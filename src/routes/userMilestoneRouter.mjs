@@ -5,7 +5,7 @@ import authMiddleware from '../middlewares/authMiddleware.mjs'
 const userMilestoneRouter = express.Router()
 
 userMilestoneRouter.get(
-    '/user-milestones/:userId',
+    '/user-milestones/:user_id',
     authMiddleware,
     userMilestoneController.getMilestoneDetail
 )

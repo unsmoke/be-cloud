@@ -7,10 +7,10 @@ import { validate } from '../validations/validation.mjs'
 const prisma = new PrismaClient()
 
 const fetchMilestoneDetail = async (req) => {
-    const { userId } = validate(fetchIdMilestoneSchema, req.params)
+    const { user_id } = validate(fetchIdMilestoneSchema, req.params)
 
     const user = await prisma.user.findUnique({
-        where: { user_id: userId },
+        where: { user_id },
     })
 
     if (!user) {
