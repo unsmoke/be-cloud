@@ -59,6 +59,11 @@ const handleRelapse = async (req) => {
         })
 
         const cigaretteQuotaThisDay = checkCigaretteUserQuota.cigarettes_quota[0]
+        const updatedCigarettesQuota = [...checkCigaretteUserQuota.cigarettes_quota]
+        updatedCigarettesQuota.shift()
+        const cigarettesAvoidedToday = cigaretteQuotaThisDay - cigarettes_this_day
+        const moneySavedToday =
+            (cigarettesAvoidedToday / userHealth.cigarettes_per_pack) * userHealth.pack_price
 
         const userHealth = await prisma.userHealth.findUnique({
             where: { user_id },
@@ -78,34 +83,29 @@ const handleRelapse = async (req) => {
         }
 
         if (!activityLog.breathing_id || !activityLog.journal_id) {
-            await prisma.user.update({
+            return await prisma.user.update({
                 where: { user_id },
                 data: {
                     streak_count: 0,
+                    money_saved: user.money_saved + moneySavedToday,
+                    cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
+                },
+                select: {
+                    streak_count: true,
                 },
             })
-            throw new ResponseError(
-                errors.HTTP.CODE.BAD_REQUEST,
-                errors.HTTP.STATUS.BAD_REQUEST,
-                errors.RELAPSE.INCOMPLETE_ACTIVITY
-            )
         }
 
         if (cigarettes_this_day > cigaretteQuotaThisDay) {
-            await prisma.user.update({
+            return await prisma.user.update({
                 where: { user_id },
                 data: {
                     streak_count: 0,
+                    money_saved: user.money_saved + moneySavedToday,
+                    cigarettes_avoided: user.cigarettes_avoided + cigarettesAvoidedToday,
                 },
             })
-            return
         }
-
-        const updatedCigarettesQuota = [...checkCigaretteUserQuota.cigarettes_quota]
-        updatedCigarettesQuota.shift()
-        const cigarettesAvoidedToday = cigaretteQuotaThisDay - cigarettes_this_day
-        const moneySavedToday =
-            (cigarettesAvoidedToday / userHealth.cigarettes_per_pack) * userHealth.pack_price
 
         return await prisma.user.update({
             where: { user_id },
