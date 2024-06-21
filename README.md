@@ -6,7 +6,6 @@ Welcome to the Be-Cloud project! This project leverages Node.js for real-time da
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the Project](#running-the-project)
-- [Project Structure](#project-structure)
 
 ## Installation
 
