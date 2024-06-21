@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,11 +8,166 @@ datasource db {
 }
 
 model User {
-  user_id      Int     @id @default(autoincrement())
-  username     String  @db.VarChar(100)
-  email        String  @unique @db.VarChar(100)
-  password     String  @db.VarChar(100)
-  exp          Int     @default(0) @db.Integer
-  balance_coin Float   @default(0) @db.Real
-  is_premium   Boolean @default(false) @db.Boolean
+  user_id            String          @id @default(uuid())
+  full_name          String
+  username           String?         @unique
+  email              String          @unique
+  password           String
+  time_zone          String?
+  balance_coin       Int             @default(0)
+  exp                Int             @default(0)
+  streak_count       Int             @default(0)
+  money_saved        Float           @default(0.0)
+  cigarettes_avoided Int             @default(0)
+  cigarettes_quota   Int[]
+  province           String?
+  city               String?
+  is_premium         Boolean         @default(false)
+  profile_url        String?
+  current_day        Int?            @default(0)
+  current_lung       String?
+  active             Boolean         @default(false)
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @default(now()) @updatedAt
+  user_items         UserItem[]
+  shop_items         ShopItem[]
+  activity_logs      ActivityLog[]
+  user_healths       UserHealth[]
+  user_plans         UserPlan[]
+  user_milestones    UserMilestone[]
+  user_relapses      UserRelapse[]
+  tokens             Token[]
+}
+
+model Item {
+  item_id     String     @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  img_url     String
+  lung_url    String
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now()) @updatedAt
+  user_items  UserItem[]
+  shop_items  ShopItem[]
+}
+
+model UserItem {
+  user_id    String
+  item_id    String
+  user       User     @relation(fields: [user_id], references: [user_id])
+  item       Item     @relation(fields: [item_id], references: [item_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@id([user_id, item_id])
+}
+
+model ShopItem {
+  user_id    String
+  item_id    String
+  user       User     @relation(fields: [user_id], references: [user_id])
+  item       Item     @relation(fields: [item_id], references: [item_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@id([user_id, item_id])
+}
+
+model ActivityLog {
+  activity_log_id Int                @id @default(autoincrement())
+  user_id         String
+  breathing_id    Int?
+  journal_id      Int?
+  date            DateTime
+  created_at      DateTime           @default(now())
+  updated_at      DateTime           @default(now()) @updatedAt
+  user            User               @relation(fields: [user_id], references: [user_id])
+  breathing       BreathingActivity? @relation(fields: [breathing_id], references: [breathing_id])
+  journal         JournalActivity?   @relation(fields: [journal_id], references: [journal_id])
+}
+
+model BreathingActivity {
+  breathing_id  Int           @id @default(autoincrement())
+  duration      Int
+  reward        Float
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now()) @updatedAt
+  activity_logs ActivityLog[]
+}
+
+model JournalActivity {
+  journal_id    Int           @id @default(autoincrement())
+  title         String
+  body          String
+  reward        Float
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now()) @updatedAt
+  activity_logs ActivityLog[]
+}
+
+model UserHealth {
+  user_id              String
+  date_of_birth        DateTime
+  gender               String
+  smoking_start_time   Int
+  is_nicotine_med      Boolean
+  is_e_cigarette       Int
+  first_cigarette_date DateTime
+  is_depressed         Boolean
+  is_other_tobacco     Int
+  is_spirit            Boolean
+  cigarettes_per_day   Int
+  cigarettes_per_pack  Int
+  pack_price           Float
+  motivation           String   @db.VarChar(1000)
+  last_7_days          Boolean
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now()) @updatedAt
+  user                 User     @relation(fields: [user_id], references: [user_id])
+
+  @@id([user_id])
+}
+
+model UserPlan {
+  plan_id                   Int      @id @default(autoincrement())
+  user_id                   String
+  duration                  Int
+  probability               Float
+  original_cigarettes_quota Int[]
+  is_active                 Boolean
+  created_at                DateTime @default(now())
+  updated_at                DateTime @default(now()) @updatedAt
+  user                      User     @relation(fields: [user_id], references: [user_id])
+}
+
+model UserMilestone {
+  milestone_id   Int      @id @default(autoincrement())
+  user_id        String
+  title          String
+  description    String
+  target_value   Int
+  achieved_value Int
+  date_achieved  DateTime
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now()) @updatedAt
+  user           User     @relation(fields: [user_id], references: [user_id])
+}
+
+model UserRelapse {
+  relapse_id Int      @id @default(autoincrement())
+  user_id    String
+  date       DateTime
+  user       User     @relation(fields: [user_id], references: [user_id])
+}
+
+model Token {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  user_id    String
+  expires_at DateTime
+  user       User     @relation(fields: [user_id], references: [user_id])
+  created_at DateTime @default(now())
+
+  @@index([user_id])
 }

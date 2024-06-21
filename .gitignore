@@ -2,3 +2,4 @@ node_modules
 cloud_sql_proxy
 .env
 .idea
+*.json
